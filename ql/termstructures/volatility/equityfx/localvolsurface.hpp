@@ -32,6 +32,7 @@ namespace QuantLib {
     class BlackVolTermStructure;
     class YieldTermStructure;
     class Quote;
+	class FixedLocalVolSurface; 
 
     //! Local volatility surface derived from a Black vol surface
     /*! For details about this implementation refer to

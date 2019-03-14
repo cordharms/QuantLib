@@ -66,6 +66,34 @@ namespace QuantLib {
         setInterpolation<Linear>();
     }
 
+	FixedLocalVolSurface::FixedLocalVolSurface(
+		const Date& referenceDate,
+		const std::vector<Date>& dates,
+		const std::vector<Real>& strikes,
+		const Matrix& localVolMatrix,
+		const DayCounter& dayCounter,
+		Extrapolation lowerExtrapolation,
+		Extrapolation upperExtrapolation)
+		: LocalVolTermStructure(
+			referenceDate, NullCalendar(), Following, dayCounter),
+		maxDate_(dates.back()),
+		localVolMatrix_(ext::make_shared<Matrix>(localVolMatrix)),
+		strikes_(dates.size(), ext::make_shared<std::vector<Real> >(strikes)),
+		localVolInterpol_(dates.size()),
+		lowerExtrapolation_(lowerExtrapolation),
+		upperExtrapolation_(upperExtrapolation) {
+
+		QL_REQUIRE(dates[0] >= referenceDate,
+			"cannot have dates[0] < referenceDate");
+
+		times_ = std::vector<Time>(dates.size());
+		for (Size j = 0; j<times_.size(); j++)
+			times_[j] = timeFromReference(dates[j]);
+
+		checkSurface();
+		setInterpolation<Linear>();
+	}
+
     FixedLocalVolSurface::FixedLocalVolSurface(
         const Date& referenceDate,
         const std::vector<Time>& times,
