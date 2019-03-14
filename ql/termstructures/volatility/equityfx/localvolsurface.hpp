@@ -32,6 +32,7 @@ namespace QuantLib {
     class BlackVolTermStructure;
     class YieldTermStructure;
     class Quote;
+	class FixedLocalVolSurface; 
 
     //! Local volatility surface derived from a Black vol surface
     /*! For details about this implementation refer to
@@ -87,8 +88,8 @@ namespace QuantLib {
 		InterpolatedLocalVolSurface(const Handle<BlackVolTermStructure>& blackTS,
 			const Handle<YieldTermStructure>& riskFreeTS,
 			const Handle<YieldTermStructure>& dividendTS,
-			const Handle<Quote>& underlying, Size strikeGridAmt,
-			Size timeStepsPerYear);
+			const Handle<Quote>& underlying, Size strikeGridAmt=100,
+			Size timeStepsPerYear=100);
 
 		inline Matrix getSurface() {
 			Matrix mat(gridTimes_.size(), strikes_[0]->size());

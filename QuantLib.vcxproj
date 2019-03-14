@@ -706,8 +706,11 @@
     <ClInclude Include="ql\experimental\models\hestonslvmcmodel.hpp" />
     <ClInclude Include="ql\experimental\models\normalclvmodel.hpp" />
     <ClInclude Include="ql\experimental\models\squarerootclvmodel.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\all.hpp" />
     <ClInclude Include="ql\experimental\templatemodels\auxilliaries\choleskyfactorisationT.hpp" />
     <ClInclude Include="ql\experimental\templatemodels\hullwhite\g2ppT.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\montecarlo\all.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\multiasset\all.hpp" />
     <ClInclude Include="ql\experimental\templatemodels\multiasset\localcorrelationbsmodel.hpp" />
     <ClInclude Include="ql\experimental\templatemodels\multiasset\localcorrelationSLVmodel.hpp" />
     <ClInclude Include="ql\experimental\templatemodels\multiasset\multiassetslvmodel.hpp" />

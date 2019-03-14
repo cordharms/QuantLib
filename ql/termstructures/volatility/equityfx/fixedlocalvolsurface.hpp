@@ -47,6 +47,16 @@ namespace QuantLib {
                              Extrapolation upperExtrapolation =
                                  ConstantExtrapolation);
 
+		FixedLocalVolSurface(const Date& referenceDate,
+			const std::vector<Date>& dates,
+			const std::vector<Real>& strikes,
+			const Matrix& localVolMatrix,
+			const DayCounter& dayCounter,
+			Extrapolation lowerExtrapolation =
+			ConstantExtrapolation,
+			Extrapolation upperExtrapolation =
+			ConstantExtrapolation);
+
         FixedLocalVolSurface(const Date& referenceDate,
                              const std::vector<Time>& times,
                              const std::vector<Real>& strikes,

@@ -4,7 +4,7 @@ SUBDIRS = amortizingbonds averageois barrieroption basismodels callablebonds \
           exoticoptions finitedifferences futures fx inflation lattices \
           math mcbasket models processes risk shortrate swaptions \
           termstructures vanillalocalvolmodel variancegamma \
-          varianceoption volatility
+          varianceoption volatility templatemodels
 
 AM_CPPFLAGS = -I${top_builddir} -I${top_srcdir}
 
