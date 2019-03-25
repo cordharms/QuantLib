@@ -26,10 +26,7 @@ namespace QuantLib {
 		Handle<YieldTermStructure>                                               termStructure_;  // domestic discounting term structure
 		std::map<std::string, size_t>                                            index_;
 		std::vector<boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>> processes_;
-		std::vector<boost::shared_ptr<QuantLib::LocalVolSurface>>				 localVolSurfaces_;
 		RealStochasticProcess::MatA                                              DT_;  // D^T D = Correlations
-
-		void initProcessesFromSurface();
 	public:
 		MultiAssetBSModel(const Handle<YieldTermStructure>&                                               termStructure,
 			              const std::vector<std::string>&                                                 aliases,
@@ -44,10 +41,7 @@ namespace QuantLib {
 			const std::vector<std::string>&                                                 aliases,
 			const std::vector<boost::shared_ptr<QuantLib::LocalVolSurface>>&				localVolSurfaces,
 			const RealStochasticProcess::MatA&                                              correlations);
-		MultiAssetBSModel(const Handle<YieldTermStructure>&                                 termStructure,
-			const std::vector<std::string>&                                                 aliases,
-			const std::vector<boost::shared_ptr<QuantLib::LocalVolSurface>>&				localVolSurfaces);
-
+		
 		// dimension of X
 		inline virtual size_t size() { return processes_.size(); }
 		// stochastic factors of x and z (maybe distinguish if trivially eta=0)
