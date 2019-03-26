@@ -90,6 +90,7 @@ namespace QuantLib {
 		std::vector<Time>& getTimes() { return times_; };
 		std::vector<std::vector<Real>>& getStrikes() {return strikes_;};
 		std::vector<std::vector<Real>>& getSurfaceF() { return surfaceF_; };
+		virtual QuantLib::Real localFStrike(Time t, const RealStochasticProcess::VecA& X0) = 0;
 
       protected:
 		  virtual Real localCorrImplTeq0(Time t, const RealStochasticProcess::VecA& X0, bool extrapolate = false) = 0;
@@ -97,7 +98,6 @@ namespace QuantLib {
 			  bool extrapolate = false);
 		  QuantLib::Real localF(Time t, const RealStochasticProcess::VecA& X0,
 			  bool extrapolate = false);
-		  virtual QuantLib::Real localFStrike(Time t, const RealStochasticProcess::VecA& X0) = 0;
 		  virtual QuantLib::Real checkLambdaValue(QuantLib::Real lambda) = 0;
 
 		  RealStochasticProcess::MatA corr0_;

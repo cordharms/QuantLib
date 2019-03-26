@@ -4234,12 +4234,6 @@
     <ClInclude Include="ql\termstructures\volatility\equityfx\noexceptlocalvolsurface.hpp">
       <Filter>termstructures\volatility\equityfx</Filter>
     </ClInclude>
-    <ClInclude Include="ql\math\polynomialmathfunction.hpp">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\math\pascaltriangle.hpp">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="ql\models\shortrate\onefactormodels\gaussian1dmodel.hpp">
       <Filter>models\shortrate\onefactormodels</Filter>
     </ClInclude>
@@ -4272,9 +4266,6 @@
     </ClInclude>
     <ClInclude Include="ql\termstructures\volatility\equityfx\hestonblackvolsurface.hpp">
       <Filter>termstructures\volatility\equityfx</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.hpp">
-      <Filter>methods\finitedifferences\operators</Filter>
     </ClInclude>
     <ClInclude Include="ql\math\matrixutilities\gmres.hpp">
       <Filter>math\matrixutilities</Filter>
@@ -4543,6 +4534,11 @@
       <Filter>experimental\templatemodels\multiasset</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\basismodels\all.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\all.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\montecarlo\all.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\multiasset\all.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ql\methods\montecarlo\brownianbridge.cpp">
@@ -7079,12 +7075,6 @@
     <ClCompile Include="ql\experimental\finitedifferences\fdmlocalvolfwdop.cpp">
       <Filter>experimental\finitedifferences</Filter>
     </ClCompile>
-    <ClCompile Include="ql\math\polynomialmathfunction.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\math\pascaltriangle.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
     <ClCompile Include="ql\models\shortrate\onefactormodels\gaussian1dmodel.cpp">
       <Filter>models\shortrate\onefactormodels</Filter>
     </ClCompile>
@@ -7111,9 +7101,6 @@
     </ClCompile>
     <ClCompile Include="ql\experimental\models\normalclvmodel.cpp">
       <Filter>experimental\models</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.cpp">
-      <Filter>methods\finitedifferences\operators</Filter>
     </ClCompile>
     <ClCompile Include="ql\experimental\finitedifferences\gbsmrndcalculator.cpp">
       <Filter>experimental\finitedifferences</Filter>
@@ -7254,6 +7241,8 @@
     <ClCompile Include="ql\patterns\observable.cpp">
       <Filter>patterns</Filter>
     </ClCompile>
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Flex Include="ql\experimental\templatemodels\montecarlo\scripting\lexer.l">

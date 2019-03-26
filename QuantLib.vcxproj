@@ -754,6 +754,8 @@
     <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.hpp" />
     <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.hpp" />
     <ClInclude Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.hpp" />
     <ClInclude Include="ql\experimental\termstructures\localcorrsurfaceabf.hpp" />
     <ClInclude Include="ql\experimental\termstructures\localcorrtermstructure.hpp" />
     <ClInclude Include="ql\experimental\vanillalocalvolmodel\vanillalocalvolmodel.hpp" />
@@ -2171,6 +2173,8 @@
     <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.cpp" />
     <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.cpp" />
     <ClCompile Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.cpp" />
     <ClCompile Include="ql\experimental\termstructures\localcorrsurfaceabf.cpp" />
     <ClCompile Include="ql\experimental\termstructures\localcorrtermstructure.cpp" />
     <ClCompile Include="ql\experimental\vanillalocalvolmodel\vanillalocalvolmodel.cpp" />
