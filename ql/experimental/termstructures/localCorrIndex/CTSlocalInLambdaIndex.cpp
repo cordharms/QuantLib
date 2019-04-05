@@ -27,8 +27,10 @@ namespace QuantLib {
 		const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&			    processToCal,
 		const RealStochasticProcess::MatA&												corr0,
 		const RealStochasticProcess::MatA&												corr1,
-		const RealStochasticProcess::VecA&												indexWeights)
-    : LocalCorrSurfaceABFIndex(processes,processToCal,corr0,corr1,indexWeights){
+		const RealStochasticProcess::VecA&												indexWeights,
+		bool																			possibleNegativeIndex,
+		double																			processToCalBlackVolShift)
+    : LocalCorrSurfaceABFIndex(processes,processToCal,corr0,corr1,indexWeights,possibleNegativeIndex,processToCalBlackVolShift){
 		//initializeF();
 		//setInterpolation<Linear>();
 	}

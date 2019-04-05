@@ -33,11 +33,15 @@ namespace QuantLib {
 		const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&  		    processToCal,
 		const RealStochasticProcess::MatA&												corr0,
 		const RealStochasticProcess::MatA&												corr1,
-		const RealStochasticProcess::VecA&												indexWeights)
+		const RealStochasticProcess::VecA&												indexWeights,
+		bool																			possibleNegativeIndex,
+		double																		    processToCalBlackVolShift)
     : LocalCorrSurfaceABF(processes, processToCal) {
 		corr0_ = RealStochasticProcess::MatA(corr0);
 		corr1_ = RealStochasticProcess::MatA(corr1);
 		indexWeights_ = RealStochasticProcess::VecA(indexWeights);
+		possibleNegativeIndex_ = possibleNegativeIndex;
+		processToCalBlackVolShift_ = processToCalBlackVolShift;
 
 		QL_ASSERT(processes.size() == indexWeights.size(), "processes and indexWeights do not fit.");
 		QL_ASSERT(processes.size() == corr0.size(), "processes and corr0 do not fit.");
@@ -178,6 +182,7 @@ namespace QuantLib {
 			return getIndexCovariance(corr1_, s0, vol);
 			break;
 		default:
+			QL_FAIL("given CTSIndexCovarianceType not considered.");
 			break;
 		}
 	}

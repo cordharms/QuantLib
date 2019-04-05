@@ -40,7 +40,9 @@ namespace QuantLib {
 							  const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&				 processToCal,
 			const RealStochasticProcess::MatA&																	 corr0,
 			const RealStochasticProcess::MatA&																	 corr1,
-							  const RealStochasticProcess::VecA&												 indexWeights);
+		    const RealStochasticProcess::VecA&																	 indexWeights,
+			bool																								 possibleNegativeIndex,
+			double																								 processToCalBlackVolShift);
 		LocalCorrSurfaceABFIndex(const std::vector<boost::shared_ptr<QuantLib::HestonSLVProcess>>&				 processes,
 			const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&									 processToCal,
 			const RealStochasticProcess::MatA&																	 corr0,
@@ -61,7 +63,8 @@ namespace QuantLib {
 		
 		enum CTSIndexCovarianceType { CORR0, CORR1 };
 		Real getIndexCovariance(CTSIndexCovarianceType type, RealStochasticProcess::VecA& s0, RealStochasticProcess::VecA& vol);
-		
+		bool possibleNegativeIndex() { return possibleNegativeIndex_; };
+		double getProcessToCalBlackVolShift() { return processToCalBlackVolShift_; };
 
 	protected:
 		  virtual Real localCorrImplTeq0(Time t, const RealStochasticProcess::VecA& X0, bool extrapolate = false);
@@ -71,6 +74,8 @@ namespace QuantLib {
 		  
 		  Real getIndexCovariance(RealStochasticProcess::MatA& corrMatrix, RealStochasticProcess::VecA& s0, RealStochasticProcess::VecA& vol);
 		  RealStochasticProcess::VecA indexWeights_;
+		  bool possibleNegativeIndex_;
+		  double processToCalBlackVolShift_;
 		  
     };
 }

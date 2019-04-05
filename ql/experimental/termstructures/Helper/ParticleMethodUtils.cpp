@@ -30,6 +30,7 @@
 #include <math.h>
 #include <boost\math\distributions.hpp>
 #include <boost\shared_ptr.hpp>
+#include <ql\pricingengines\blackscholescalculator.hpp>
 
 namespace QuantLib {
 
@@ -276,6 +277,17 @@ namespace QuantLib {
 		Real bwIn;
 		Real bwRatio;
 		double indexStart;
+		double negIndVol;
+		double negIndPriceT;
+		double negIndPrice;
+		double negIndPriceUp;
+		double negIndPriceDn;
+		double negIndTimeBmp = 0.0001;
+		double negIndAssetBmp = 0.001;
+		double negIndAsset;
+		double negIndShift = surface->getProcessToCalBlackVolShift();
+		double dCdt;
+		double dCdKdK;
 
 		//Calculate local correlation successively over time
 
@@ -322,7 +334,36 @@ namespace QuantLib {
 				eNum[j] = 0;
 				eDen[j] = 0;
 				eScale[j] = 0;
-				vol3[j] = processToCal->localVolatility()->localVol(times[i], strikes[i][j], true);
+				if (surface->possibleNegativeIndex()) {
+					//only implemented for zero rates and zero dividends
+					
+					negIndVol = processToCal->blackVolatility()->blackVol(times[i],strikes[i][j],true);
+					negIndPrice = BlackScholesCalculator(Option::Type::Call,strikes[i][j]+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
+							negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
+
+					negIndVol = processToCal->blackVolatility()->blackVol(times[i]+ negIndTimeBmp, strikes[i][j], true);
+					negIndPriceT = BlackScholesCalculator(Option::Type::Call, strikes[i][j]+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i] + negIndTimeBmp),
+						negIndVol*sqrt(times[i] + negIndTimeBmp), processToCal->riskFreeRate()->discount(times[i] + negIndTimeBmp)).value();
+
+					dCdt = (negIndPriceT - negIndPrice) / negIndTimeBmp;
+
+					negIndAsset = strikes[i][j]>1 ? strikes[i][j]*(1 + negIndAssetBmp) : strikes[i][j]+negIndAssetBmp;
+					negIndVol = processToCal->blackVolatility()->blackVol(times[i], negIndAsset, true);
+					negIndPriceUp = BlackScholesCalculator(Option::Type::Call, negIndAsset+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
+						negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
+
+					negIndAsset = strikes[i][j]>1 ? strikes[i][j] * (1 - negIndAssetBmp) : strikes[i][j] - negIndAssetBmp;
+					negIndVol = processToCal->blackVolatility()->blackVol(times[i], negIndAsset, true);
+					negIndPriceDn = BlackScholesCalculator(Option::Type::Call, negIndAsset+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
+						negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
+
+					negIndAsset = strikes[i][j]>1 ? negIndAssetBmp*strikes[i][j] : negIndAssetBmp;
+					dCdKdK = (negIndPriceUp - 2 * negIndPrice + negIndPriceDn) / (negIndAsset * negIndAsset);
+
+					vol3[j] = 2 * dCdt / dCdKdK;
+				}
+				else
+					vol3[j] = processToCal->localVolatility()->localVol(times[i], strikes[i][j], true);
 			}
 
 			for (size_t k = 0; k < numberOfPaths; k++) //particle method: over MC paths
@@ -373,7 +414,11 @@ namespace QuantLib {
 					+ std::string("). Either decrease number of MC paths or increase exponentN or kappa."));
 				if (eNum[j] != eNum[j] || vol3[j] != vol3[j] || eScale[j] != eScale[j] || eDen[j] != eDen[j] || eDen[j] == 0)
 					QL_FAIL("surface not well defined.");
-				surfaceF[i][j] = ( vol3[j] * vol3[j] * strikes[i][j]* strikes[i][j] * eScale[j]- eNum[j]) / (eDen[j]);
+				if (surface->possibleNegativeIndex()) {
+					surfaceF[i][j] = (vol3[j] * eScale[j] - eNum[j]) / (eDen[j]);
+				}
+				else
+					surfaceF[i][j] = ( vol3[j] * vol3[j] * strikes[i][j]* strikes[i][j] * eScale[j]- eNum[j]) / (eDen[j]);
 			}
 			//set interpolation on new dimension:
 			surface->setInterpolationStrike<Linear>(i);
