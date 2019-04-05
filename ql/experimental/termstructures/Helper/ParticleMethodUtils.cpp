@@ -34,7 +34,7 @@
 
 namespace QuantLib {
 
-	void ParticleMethodUtils::calibrateFX(Handle<LocalCorrSurfaceABFFX> surface, const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
+	void ParticleMethodUtils::calibrateFX(Handle<LocalCorrSurfaceABFFX>& surface, const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
 		Time deltaT, Time tMin, Real kappa, Real sigmaAVR, Real exponentN, Real gridMinQuantile,
 		Real gridMaxQuantile, unsigned int ns1, unsigned int ns2) {
 		
@@ -207,7 +207,7 @@ namespace QuantLib {
 		}
 	}	  
 
-	void ParticleMethodUtils::calibrateIndex(Handle<LocalCorrSurfaceABFIndex> surface, const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
+	void ParticleMethodUtils::calibrateIndex(Handle<LocalCorrSurfaceABFIndex>& surface, const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
 		Time deltaT, Time tMin, Real kappa, Real sigmaAVR, Real exponentN, Real gridMinQuantile,
 		Real gridMaxQuantile, unsigned int ns1, unsigned int ns2) {
 
@@ -277,18 +277,7 @@ namespace QuantLib {
 		Real bwIn;
 		Real bwRatio;
 		double indexStart;
-		double negIndVol;
-		double negIndPriceT;
-		double negIndPrice;
-		double negIndPriceUp;
-		double negIndPriceDn;
-		double negIndTimeBmp = 0.0001;
-		double negIndAssetBmp = 0.001;
-		double negIndAsset;
-		double negIndShift = surface->getProcessToCalBlackVolShift();
-		double dCdt;
-		double dCdKdK;
-
+		
 		//Calculate local correlation successively over time
 
 		for (size_t i = 1; i < surfaceF.size() - 1; i++) //iteration over time, for i=0 nothing to do as correlation independent of a,b,f. In last entry, no additional simulation necessary.
@@ -335,32 +324,7 @@ namespace QuantLib {
 				eDen[j] = 0;
 				eScale[j] = 0;
 				if (surface->possibleNegativeIndex()) {
-					//only implemented for zero rates and zero dividends
-					
-					negIndVol = processToCal->blackVolatility()->blackVol(times[i],strikes[i][j],true);
-					negIndPrice = BlackScholesCalculator(Option::Type::Call,strikes[i][j]+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
-							negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
-
-					negIndVol = processToCal->blackVolatility()->blackVol(times[i]+ negIndTimeBmp, strikes[i][j], true);
-					negIndPriceT = BlackScholesCalculator(Option::Type::Call, strikes[i][j]+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i] + negIndTimeBmp),
-						negIndVol*sqrt(times[i] + negIndTimeBmp), processToCal->riskFreeRate()->discount(times[i] + negIndTimeBmp)).value();
-
-					dCdt = (negIndPriceT - negIndPrice) / negIndTimeBmp;
-
-					negIndAsset = strikes[i][j]>1 ? strikes[i][j]*(1 + negIndAssetBmp) : strikes[i][j]+negIndAssetBmp;
-					negIndVol = processToCal->blackVolatility()->blackVol(times[i], negIndAsset, true);
-					negIndPriceUp = BlackScholesCalculator(Option::Type::Call, negIndAsset+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
-						negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
-
-					negIndAsset = strikes[i][j]>1 ? strikes[i][j] * (1 - negIndAssetBmp) : strikes[i][j] - negIndAssetBmp;
-					negIndVol = processToCal->blackVolatility()->blackVol(times[i], negIndAsset, true);
-					negIndPriceDn = BlackScholesCalculator(Option::Type::Call, negIndAsset+ negIndShift, processToCal->x0()+ negIndShift, processToCal->dividendYield()->discount(times[i]),
-						negIndVol*sqrt(times[i]), processToCal->riskFreeRate()->discount(times[i])).value();
-
-					negIndAsset = strikes[i][j]>1 ? negIndAssetBmp*strikes[i][j] : negIndAssetBmp;
-					dCdKdK = (negIndPriceUp - 2 * negIndPrice + negIndPriceDn) / (negIndAsset * negIndAsset);
-
-					vol3[j] = 2 * dCdt / dCdKdK;
+					vol3[j] = getLocalVolFromPriceFormula(processToCal,strikes[i][j],times[i],surface->getProcessToCalBlackVolShift());
 				}
 				else
 					vol3[j] = processToCal->localVolatility()->localVol(times[i], strikes[i][j], true);
@@ -442,5 +406,50 @@ namespace QuantLib {
 	
 	Real ParticleMethodUtils::getCrossFX(Real asset1, Real asset2) {
 		return asset1 / asset2;
+	}
+
+	Real ParticleMethodUtils::getLocalVolFromPriceFormula(boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>& processToCal, Real strike, Time t, Real indShift) {
+		double negIndVol;
+		double negIndPriceT;
+		double negIndPrice;
+		double negIndPriceUp;
+		double negIndPriceDn;
+		double negIndTimeBmp = 0.0001;
+		double negIndAssetBmp = 0.001;
+		double negIndAsset;
+		double dCdt;
+		double dCdKdK;
+		double dCdK;
+
+		negIndVol = processToCal->blackVolatility()->blackVol(t, strike, true);
+		negIndPrice = BlackScholesCalculator(Option::Type::Call, strike + indShift, processToCal->x0() + indShift, processToCal->dividendYield()->discount(t),
+			negIndVol*sqrt(t), processToCal->riskFreeRate()->discount(t)).value();
+
+		negIndVol = processToCal->blackVolatility()->blackVol(t + negIndTimeBmp, strike, true);
+		negIndPriceT = BlackScholesCalculator(Option::Type::Call, strike + indShift, processToCal->x0() + indShift, processToCal->dividendYield()->discount(t + negIndTimeBmp),
+			negIndVol*sqrt(t + negIndTimeBmp), processToCal->riskFreeRate()->discount(t + negIndTimeBmp)).value();
+
+		dCdt = (negIndPriceT - negIndPrice) / negIndTimeBmp;
+
+		negIndAsset = strike>1 ? strike * (1 + negIndAssetBmp) : strike + negIndAssetBmp;
+		negIndVol = processToCal->blackVolatility()->blackVol(t, negIndAsset, true);
+		negIndPriceUp = BlackScholesCalculator(Option::Type::Call, negIndAsset + indShift, processToCal->x0() + indShift, processToCal->dividendYield()->discount(t),
+			negIndVol*sqrt(t), processToCal->riskFreeRate()->discount(t)).value();
+
+		negIndAsset = strike>1 ? strike * (1 - negIndAssetBmp) : strike - negIndAssetBmp;
+		negIndVol = processToCal->blackVolatility()->blackVol(t, negIndAsset, true);
+		negIndPriceDn = BlackScholesCalculator(Option::Type::Call, negIndAsset + indShift, processToCal->x0() + indShift, processToCal->dividendYield()->discount(t),
+			negIndVol*sqrt(t), processToCal->riskFreeRate()->discount(t)).value();
+
+		negIndAsset = strike>1 ? negIndAssetBmp*strike : negIndAssetBmp;
+		dCdKdK = (negIndPriceUp - 2 * negIndPrice + negIndPriceDn) / (negIndAsset * negIndAsset);
+		
+		dCdK = (negIndPriceUp - negIndPriceDn) / (2 * negIndAsset);
+
+		Real rate = processToCal->riskFreeRate()->zeroRate(t, Compounding::Continuous);
+		Real div = processToCal->dividendYield()->zeroRate(t, Compounding::Continuous);
+
+		return 2 * (dCdt + strike * dCdK*(rate-div) + div*negIndPrice) / dCdKdK;
+
 	}
 }

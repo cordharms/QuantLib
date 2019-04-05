@@ -101,9 +101,14 @@ namespace QuantLib {
 		Real cov0 = getIndexCovariance(CTSIndexCovarianceType::CORR0, s0, vol);
 
 		Real indexValue = localFStrike(t,X0);
-		Real volIndex = processToCal_->localVolatility()->localVol(t, indexValue, extrapolate);
-
-		return (indexValue*indexValue*volIndex*volIndex - cov0) / (cov1-cov0);
+		if(possibleNegativeIndex_){ 
+			Real volIndex = ParticleMethodUtils::getLocalVolFromPriceFormula(processToCal_,indexValue,t,processToCalBlackVolShift_);
+			return (volIndex - cov0) / (cov1 - cov0);
+		}
+		else {
+			Real volIndex = processToCal_->localVolatility()->localVol(t, indexValue, extrapolate);
+			return (indexValue*indexValue*volIndex*volIndex - cov0) / (cov1 - cov0);
+		}
 	}
 	
 
