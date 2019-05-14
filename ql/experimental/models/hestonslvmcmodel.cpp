@@ -183,9 +183,11 @@ namespace QuantLib {
                 sum/=inc;
 
                 vStrikes[n]->at(i) = 0.5*(pairs[e-1].first + pairs[s].first);
+				Real locVol = localVol_->localVol(t, vStrikes[n]->at(i), true);
                 (*L)[i][n] = std::sqrt(square<Real>()(
-                     localVol_->localVol(t, vStrikes[n]->at(i), true))/sum);
-
+					locVol)/sum);
+				QL_ASSERT((*L)[i][n] == (*L)[i][n], std::string("Leverage function leads to non real number for t=")+ std::to_string(t) + std::string(" and strike= ") + std::to_string(vStrikes[n]->at(i))
+													+ std::string(". locVol=") + std::to_string(locVol) + std::string(" and sum= ") + std::to_string(sum)) ;
                 s = e;
             }
 

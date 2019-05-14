@@ -25,6 +25,7 @@
 #include <ql\math\matrixutilities\pseudosqrt.hpp>
 #include <ql/experimental/templatemodels/auxilliaries/svdT.hpp>
 #include <ql/math/matrixutilities/SymmetricSchurDecomposition.hpp>
+#include <ql/experimental/termstructures/localCorrFX/localcorrsurfaceabfFX.hpp>
 
 namespace QuantLib {
 
@@ -55,10 +56,30 @@ namespace QuantLib {
 		const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&  		    processToCal,
 		const RealStochasticProcess::MatA&												corr0,
 		const RealStochasticProcess::MatA&												corr1,
-		const RealStochasticProcess::VecA&												 indexWeights)
+		const RealStochasticProcess::VecA&												 indexWeights,
+		bool																			possibleNegativeIndex,
+		double																		    processToCalBlackVolShift)
 		: LocalCorrSurfaceABF(processes, processToCal) {
+
+
+		checkHestonConsistence(corr0);
+		checkHestonConsistence(corr1);
+
+		corr0_ = RealStochasticProcess::MatA(corr0);
+		corr1_ = RealStochasticProcess::MatA(corr1);
+		indexWeights_ = RealStochasticProcess::VecA(indexWeights);
+		possibleNegativeIndex_ = possibleNegativeIndex;
+		processToCalBlackVolShift_ = processToCalBlackVolShift;
+
+		QL_ASSERT(processes.size() == indexWeights.size(), "processes and indexWeights do not fit.");
+		QL_ASSERT(2*processes.size() == corr0.size(), "processes and corr0 do not fit.");
+		QL_ASSERT(2*processes.size() == corr0[0].size(), "processes and corr0 do not fit for Heston.");
+		QL_ASSERT(2*processes.size() == corr1.size(), "processes and corr1 do not fit for Heston.");
+		QL_ASSERT(2*processes.size() == corr1[0].size(), "processes and corr1 do not fit.");
+
+		projectSymmetricToCorrelation(corr0_);
+		projectSymmetricToCorrelation(corr1_);
 		
-		QL_FAIL("LocalCorrSurfaceABFIndex with HestonSLVProcesses not implemented");
 	}
 
 
@@ -140,32 +161,6 @@ namespace QuantLib {
 		return result;
 	}
 
-	RealStochasticProcess::MatA LocalCorrSurfaceABFIndex::getPureHestonImpliedCorrelationMatrix()
-	{
-		RealStochasticProcess::MatA corrM = RealStochasticProcess::MatA(2 * processes_.size());
-
-		for (size_t k = 0; k<corrM.size(); ++k) corrM[k].resize(2 * processes_.size());
-
-		for (size_t i = 0; i < 2 * processes_.size(); i++)
-		{
-			for (size_t j = 0; j < 2 * processes_.size(); j++)
-			{
-				if (i == j) {
-					corrM[i][j] = 1;
-				}
-				else if (i == j + processes_.size() || i + processes_.size() == j) {
-					int assetIndex = std::min(i, j);
-					corrM[i][j] = processes_[assetIndex]->rho();
-				}
-				else {
-					corrM[i][j] = 0;
-				}
-			}
-		}
-
-		return corrM;
-	}
-
 	QuantLib::Real LocalCorrSurfaceABFIndex::checkLambdaValue(QuantLib::Real lambda) {
 	
 		if (lambda != lambda)
@@ -206,5 +201,22 @@ namespace QuantLib {
 		
 		return cov;
 	}
+
+	void LocalCorrSurfaceABFIndex::checkHestonConsistence(const RealStochasticProcess::MatA& corrMatrix) {
+		for (size_t i = 0; i < 2 * processes_.size(); i++)
+		{
+			for (size_t j = 0; j < 2 * processes_.size(); j++)
+			{
+				if (i == j) {
+					QL_ASSERT(corrMatrix[i][j] == 1, "Error: Correlation matrix has ones on diagonals.");
+				}
+				else if (i == j + processes_.size() || i + processes_.size() == j) {
+					int assetIndex = std::min(i, j);
+					QL_ASSERT(abs(corrMatrix[i][j] - processes_[assetIndex]->rho())<QL_EPSILON, std::string( "correlation of asset " ) + std::to_string(assetIndex) + std::string(" does not fit to rho of heston process."));
+				}
+			}
+		}
+	}
+
 }
 

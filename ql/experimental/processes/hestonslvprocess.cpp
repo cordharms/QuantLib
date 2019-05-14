@@ -99,10 +99,12 @@ namespace QuantLib {
         const Real m  =  theta_+(x0[1]-theta_)*ex;
         const Real s2 =  x0[1]*sigma_*sigma_*ex/kappa_*(1-ex)
                        + theta_*sigma_*sigma_/(2*kappa_)*(1-ex)*(1-ex);
+		QL_REQUIRE(m>QL_EPSILON,"evolve Heston: m has to be greater than zero.");
         const Real psi = s2/(m*m);
 
         if (psi < 1.5) {
             const Real b2 = 2/psi-1+std::sqrt(2/psi*(2/psi-1));
+			QL_REQUIRE(b2>QL_EPSILON, "evolve Heston: b2 has to be greater than zero");
             const Real b  = std::sqrt(b2);
             const Real a  = m/(1+b2);
 
@@ -124,6 +126,8 @@ namespace QuantLib {
         const Real rho1 = std::sqrt(1-rho_*rho_);
 
         const Volatility l_0 = leverageFct_->localVol(t0, x0[0], true);
+
+		QL_REQUIRE(l_0>=0, std::string("evolve Heston: l_0 has to be greater than or equal to zero (t=") + std::to_string(t0) + std::string(", s=") + std::to_string(x0[0]) + std::string("). l0= ") + std::to_string(l_0));
         const Real v_0 = 0.5*(x0[1]+retVal[1])*l_0*l_0;
 
         retVal[0] = x0[0]*std::exp(mu*dt - 0.5*v_0*dt

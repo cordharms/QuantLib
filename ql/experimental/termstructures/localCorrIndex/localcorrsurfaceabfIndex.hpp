@@ -47,7 +47,9 @@ namespace QuantLib {
 			const boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>&									 processToCal,
 			const RealStochasticProcess::MatA&																	 corr0,
 			const RealStochasticProcess::MatA&																	 corr1,
-			const RealStochasticProcess::VecA&																	 indexWeights);
+			const RealStochasticProcess::VecA&																	 indexWeights,
+			bool																								 possibleNegativeIndex,
+			double																								 processToCalBlackVolShift);
 
 		//@}
 		//! \name Visitability
@@ -69,14 +71,12 @@ namespace QuantLib {
 	protected:
 		  virtual Real localCorrImplTeq0(Time t, const RealStochasticProcess::VecA& X0, bool extrapolate = false);
 		  virtual QuantLib::Real checkLambdaValue(QuantLib::Real lambda);
-	  private:
-		  RealStochasticProcess::MatA getPureHestonImpliedCorrelationMatrix();
-		  
+	  private:		  
 		  Real getIndexCovariance(RealStochasticProcess::MatA& corrMatrix, RealStochasticProcess::VecA& s0, RealStochasticProcess::VecA& vol);
 		  RealStochasticProcess::VecA indexWeights_;
 		  bool possibleNegativeIndex_;
 		  double processToCalBlackVolShift_;
-		  
+		  void checkHestonConsistence(const RealStochasticProcess::MatA& corrMatrix);
     };
 }
 
