@@ -191,7 +191,23 @@ namespace QuantLib {
                 s = e;
             }
 
+			QL_ASSERT(abs(vStrikes[n]->at(0) - vStrikes[n]->at(nBins_-1)) > QL_EPSILON, "calibration error. constant asset over all paths at time " << t);
+
             leverageFunction_->setInterpolation<Linear>();
+
+			/*std::vector<std::vector<Real>> test((*L).size2());
+			for (size_t i = 0; i < test.size(); i++)
+			{
+				test[i].resize((*L).size1());
+			}
+			for (size_t i = 0; i < test.size(); i++)
+			{
+				for (size_t j = 0; j < test[i].size(); j++)
+				{
+					test[i][j] = (*L)[j][i];
+				}
+			}
+			test[0] = test[0];*/
         }
     }
 }

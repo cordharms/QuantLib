@@ -58,8 +58,8 @@ namespace QuantLib {
 		}
 		MonotonicCubicNaturalSpline interp(times.begin(),times.end(),vars.begin());  // assume ascending times
 		Real unSafeVariance = interp(t, true);
-		if (t < times[0]) unSafeVariance = vars[0];
 		Real minVariance = 1.0e-8 * t;  // assume 1bp minimum volatility
+		if (t < times[0] && unSafeVariance < minVariance) unSafeVariance = vars[0];//<- caution, local vol might become zero for small t due to dwdt=0. Due to minVariance any derivative might become zero.
 		Real safeVariance = (unSafeVariance < minVariance) ? (minVariance) : (unSafeVariance);
 		return safeVariance;
 	}

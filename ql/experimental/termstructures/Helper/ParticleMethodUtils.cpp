@@ -132,6 +132,8 @@ namespace QuantLib {
 
 			strikeStep = (strikes[i][strikes[i].size() - 1] - strikes[i][0]) / (numberStrikes-1);
 
+			QL_ASSERT(strikeStep > 0, "Error. StrikeStep shouldn't be zero for time " << times[i] << ". Check volatility.");
+
 			bandwidth = ParticleMethodUtils::bandwidth(times[i], getCrossFX(processes[0]->s0()->value(),processes[1]->s0()->value()), kappa, sigmaAVR, tMin, numberOfPaths, exponentN);
 
 			for (size_t j = 1; j < strikes[i].size()-1; j++)
@@ -302,6 +304,7 @@ namespace QuantLib {
 			strikes[i][strikes[i].size() - 1] = indexVals[(size_t)(numberOfPaths*gridMaxQuantile)];
 
 			strikeStep = (strikes[i][strikes[i].size() - 1] - strikes[i][0]) / (numberStrikes - 1);
+			QL_ASSERT(strikeStep > 0, "Error. StrikeStep shouldn't be zero for time " << times[i] << ". Check volatility.");
 			indexStart = surface->localFStrike(times[i], std::vector<Real>(processes.size(), 0));
 
 			bandwidth = ParticleMethodUtils::bandwidth(times[i], abs(indexStart)>1 ? abs(indexStart) : 1, kappa, sigmaAVR, tMin, numberOfPaths, exponentN);
@@ -448,6 +451,8 @@ namespace QuantLib {
 
 		Real rate = processToCal->riskFreeRate()->zeroRate(t, Compounding::Continuous);
 		Real div = processToCal->dividendYield()->zeroRate(t, Compounding::Continuous);
+
+		QL_REQUIRE(abs(dCdKdK) > QL_EPSILON, "local vol for cross asset delivers NaN (t=" << t << ", strike=" << strike << ")");
 
 		return 2 * (dCdt + strike * dCdK*(rate-div) + div*negIndPrice) / dCdKdK;
 

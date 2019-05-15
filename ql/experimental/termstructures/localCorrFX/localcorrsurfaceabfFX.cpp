@@ -164,7 +164,7 @@ namespace QuantLib {
 	QuantLib::Real LocalCorrSurfaceABFFX::checkLambdaValue(QuantLib::Real lambda) {
 	
 		if (lambda != lambda)
-			QL_FAIL("lambda is erroneous.");
+			QL_FAIL("lambda (coefficient for convex combination of the two corr matrices) is not a number.");
 
 		if (corr0_.size() == 2) {
 			//BSprocess, range [-1,1]

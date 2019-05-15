@@ -103,8 +103,8 @@ namespace QuantLib {
 
 	Real LocalCorrSurfaceABFIndex::localCorrImplTeq0(Time t, const RealStochasticProcess::VecA& X0, bool extrapolate) {
 		
-		//smiled surface will through an error, therefore assume one minute ahead
-		t = 1.0 / (365 * 24 * 60);
+		//smiled surface will throw an error for zero, therefore assume one day ahead
+		t = 1.0 / (365);
 
 		RealStochasticProcess::VecA s0 = RealStochasticProcess::VecA(processes_.size());
 		RealStochasticProcess::VecA vol = RealStochasticProcess::VecA(processes_.size());
@@ -136,7 +136,7 @@ namespace QuantLib {
 	Matrix LocalCorrSurfaceABFIndex::getLocalCorrelationSurface2dim(Time t,
 		std::vector<Real> assetGrid1, std::vector<Real> assetGrid2) {
 
-		QL_ASSERT(corr0_.size() == 2, "function only works for index with two assets");
+		QL_ASSERT(processes_.size() == 2, "function only works for index with two assets");
 
 		Matrix result(assetGrid1.size(), assetGrid2.size());
 		std::vector<std::vector<Real>> corrM;
@@ -191,9 +191,9 @@ namespace QuantLib {
 	Real LocalCorrSurfaceABFIndex::getIndexCovariance(RealStochasticProcess::MatA& corrMatrix, RealStochasticProcess::VecA& s0, RealStochasticProcess::VecA& vol) {
 		Real cov = 0;
 
-		for (size_t i = 0; i < corrMatrix.size(); i++)
+		for (size_t i = 0; i < processes_.size(); i++)
 		{
-			for (size_t j = 0; j < corrMatrix.size(); j++)
+			for (size_t j = 0; j < processes_.size(); j++)
 			{
 				cov += corrMatrix[i][j] * indexWeights_[i] * indexWeights_[j] * vol[i] * vol[j] * s0[i] * s0[j];
 			}
