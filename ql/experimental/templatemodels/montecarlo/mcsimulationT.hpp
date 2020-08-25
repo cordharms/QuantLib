@@ -233,6 +233,11 @@ namespace QuantLib {
 					   process_->zeroBond(obsTime, payTime, sim_->state(idx_,obsTime) );
 			}
 
+			inline ActiveType zeroBond(DateType obsTime, DateType payTime, const std::string& alias) {
+				return sim_->zcbAdjuster(obsTime, payTime, alias) *
+					process_->zeroBond(obsTime, payTime, sim_->state(idx_, obsTime), alias);
+			}
+
 			inline ActiveType asset(DateType obsTime, const std::string& alias) {
 					return sim_->assetAdjuster(obsTime,alias) + 
 						process_->asset(obsTime, sim_->state(idx_, obsTime), alias);
@@ -566,7 +571,7 @@ namespace QuantLib {
 			numeraireObservTimes_ = numeraireObservTimes;
 			// check time grids
 			QL_REQUIRE(numeraireObservTimes_.size()>1, "TemplateMCSimulation: at least two numeraireObservTimes_ required");
-			QL_REQUIRE(numeraireObservTimes_[0] >= 0, "TemplateMCSimulation: numeraireObservTimes_[0]>=0 required");
+			QL_REQUIRE(numeraireObservTimes_[0] > 0, "TemplateMCSimulation: numeraireObservTimes_[0]>0 required");
 			for (size_t k = 1; k<numeraireObservTimes_.size(); ++k) QL_REQUIRE(numeraireObservTimes_[k - 1]<numeraireObservTimes_[k], "TemplateMCSimulation: numeraireObservTimes_ in ascending order required");
             // initialise adjuster
 			numeraireAdjuster_ = VecA(numeraireObservTimes_.size(), 0.0);
@@ -610,10 +615,10 @@ namespace QuantLib {
 			zcbOffsetTimes_ = zcbOffsetTimes;
 			// check time grids
 			QL_REQUIRE(zcbObservTimes_.size()>1,"TemplateMCSimulation: at least two zcbObservTimes_ required");
-			QL_REQUIRE(zcbObservTimes_[0]>=0,"TemplateMCSimulation: zcbObservTimes_[0]>=0 required");
+			QL_REQUIRE(zcbObservTimes_[0]>0,"TemplateMCSimulation: zcbObservTimes_[0]>0 required");
 			for (size_t k=1; k<zcbObservTimes_.size(); ++k) QL_REQUIRE(zcbObservTimes_[k-1]<zcbObservTimes_[k],"TemplateMCSimulation: zcbObservTimes_ in ascending order required");
 			QL_REQUIRE(zcbOffsetTimes_.size()>1,"TemplateMCSimulation: at least two zcbOffsetTimes_ required");
-			QL_REQUIRE(zcbOffsetTimes_[0]>=0,"TemplateMCSimulation: zcbOffsetTimes_[0]>=0 required");
+			QL_REQUIRE(zcbOffsetTimes_[0]>0,"TemplateMCSimulation: zcbOffsetTimes_[0]>0 required");
 			for (size_t k=1; k<zcbOffsetTimes_.size(); ++k) QL_REQUIRE(zcbOffsetTimes_[k-1]<zcbOffsetTimes_[k],"TemplateMCSimulation: zcbOffsetTimes_ in ascending order required");
 			// initialise zero adjuster matrix
 			zcbAdjuster_ = MatA(zcbObservTimes_.size(),VecA(zcbOffsetTimes_.size(),0.0));
@@ -663,6 +668,10 @@ namespace QuantLib {
 				           zcbAdjuster_[obsIdx-1][offIdx  ] * (1.0-rhoObs) * (rhoOff)     +
 				           zcbAdjuster_[obsIdx  ][offIdx  ] * (rhoObs)     * (rhoOff)     ;
 			return exp(-z*(T-t));
+		}
+
+		inline ActiveType zcbAdjuster(const DateType t, const DateType T, const std::string& alias) {
+			return 1.0;  // tbd. This needs to be implemented
 		}
 
 		// asset adjuster

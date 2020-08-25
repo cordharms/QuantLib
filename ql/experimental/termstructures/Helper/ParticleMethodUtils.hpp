@@ -24,10 +24,9 @@
 #ifndef quantlib_particleMethodUtils_hpp
 #define quantlib_particleMethodUtils_hpp
 
-#include <ql\experimental\termstructures\Helper\KernelInterface.hpp>
+#include <ql/experimental/termstructures/Helper/KernelInterface.hpp>
 #include <ql/experimental/termstructures/localCorrFX/localcorrsurfaceabfFX.hpp>
-#include <ql/experimental/termstructures/localCorrIndex/localcorrsurfaceabfIndex.hpp>
-#include <ql\handle.hpp>
+#include <ql/handle.hpp>
 #include <string.h>
 
 namespace QuantLib {
@@ -39,15 +38,10 @@ namespace QuantLib {
     class ParticleMethodUtils {
       public:
 
-		  static void calibrateFX(Handle<LocalCorrSurfaceABFFX>& surface,const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
-			  Time deltaT, Time tMin, Real kappa, Real sigmaAVR, Real exponentN, Real gridMinQuantile,
-			  Real gridMaxQuantile, unsigned int ns1, unsigned int ns2);
-		  static void calibrateIndex(Handle<LocalCorrSurfaceABFIndex>& surface, const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
+		  static void calibrateFX(Handle<LocalCorrSurfaceABFFX> surface,const std::string& kernelIn, unsigned int numberOfPaths, Time maxTime,
 			  Time deltaT, Time tMin, Real kappa, Real sigmaAVR, Real exponentN, Real gridMinQuantile,
 			  Real gridMaxQuantile, unsigned int ns1, unsigned int ns2);
 		  static Real getCrossFX(Real asset1, Real asset2);
-
-		  static Real getLocalVolFromPriceFormula(boost::shared_ptr<QuantLib::GeneralizedBlackScholesProcess>& processToCal,Real strike, Time t, Real indShift);
       protected:
 		  
 	  private:

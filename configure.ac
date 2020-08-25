@@ -1,12 +1,12 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([QuantLib], [1.16],
+AC_INIT([QuantLib], [1.19-dev],
         [quantlib-dev@lists.sourceforge.net],
         [QuantLib])
 AC_PREREQ(2.62)
 AC_CONFIG_SRCDIR([ql/qldefines.hpp])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_HEADERS([ql/config.hpp])
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign nostdinc subdir-objects])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_COPYRIGHT([
@@ -474,7 +474,17 @@ AC_CONFIG_FILES([
     ql/experimental/risk/Makefile
     ql/experimental/shortrate/Makefile
     ql/experimental/swaptions/Makefile
+    ql/experimental/templatemodels/Makefile
+    ql/experimental/templatemodels/auxilliaries/Makefile
+    ql/experimental/templatemodels/hybrid/Makefile
+    ql/experimental/templatemodels/montecarlo/Makefile
+    ql/experimental/templatemodels/montecarlo/scripting/Makefile
+    ql/experimental/templatemodels/multiasset/Makefile
+    ql/experimental/templatemodels/qgaussian2/Makefile
+    ql/experimental/templatemodels/stochvol/Makefile
     ql/experimental/termstructures/Makefile
+    ql/experimental/termstructures/Helper/Makefile
+    ql/experimental/termstructures/localCorrFX/Makefile
     ql/experimental/vanillalocalvolmodel/Makefile
     ql/experimental/variancegamma/Makefile
     ql/experimental/varianceoption/Makefile
@@ -565,27 +575,9 @@ AC_CONFIG_FILES([
     m4/Makefile
     Docs/Makefile
     Examples/Makefile
-    Examples/BasketLosses/Makefile
-    Examples/BermudanSwaption/Makefile
-    Examples/Bonds/Makefile
-    Examples/CallableBonds/Makefile
-    Examples/CDS/Makefile
-    Examples/ConvertibleBonds/Makefile
-    Examples/CVAIRS/Makefile
-    Examples/DiscreteHedging/Makefile
-    Examples/EquityOption/Makefile
-    Examples/FittedBondCurve/Makefile
-    Examples/FRA/Makefile
-    Examples/LatentModel/Makefile
-    Examples/Gaussian1dModels/Makefile
-    Examples/GlobalOptimizer/Makefile
-    Examples/MarketModels/Makefile
-    Examples/MultidimIntegral/Makefile
-    Examples/MulticurveBootstrapping/Makefile
-    Examples/Replication/Makefile
-    Examples/Repo/Makefile
     test-suite/Makefile])
 AC_CONFIG_FILES([quantlib-config],[chmod +x quantlib-config])
 AC_CONFIG_FILES([QuantLib.spec])
 AC_CONFIG_FILES([quantlib.pc])
 AC_OUTPUT
+
