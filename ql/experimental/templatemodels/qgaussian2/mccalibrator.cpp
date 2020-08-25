@@ -230,8 +230,8 @@ namespace QuantLib {
 					std::vector<Real> swapRateSample(nPaths, 0.0);
 					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> mcFloatLeg(new MCAnnuity(expiryTime, calibSwaptions_[i][j]->floatTimes(), calibSwaptions_[i][j]->floatWeights()));
 					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> mcFixedLeg(new MCAnnuity(expiryTime, calibSwaptions_[i][j]->fixedTimes(), calibSwaptions_[i][j]->annuityWeights()));
-					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> one(new QGMonteCarloCalibrator::MCPayoff::FixedAmount(1.0));
-					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> oneAtT(new QGMonteCarloCalibrator::MCPayoff::Pay(one, expiryTime));
+					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> one(new QGMonteCarloCalibrator::MCBase::FixedAmount(1.0));
+					boost::shared_ptr<QGMonteCarloCalibrator::MCPayoff> oneAtT(new QGMonteCarloCalibrator::MCBase::Pay(one, expiryTime));
 					for (size_t k = 0; k < nPaths; ++k) {
 						boost::shared_ptr<MCSimulation::Path> p = calibrator_->mcSimulation_->path(k);
 						oneOverBSample[k] = oneAtT->discountedAt(p);
@@ -394,7 +394,7 @@ namespace QuantLib {
 		const Real                                            penaltySigma,
 		const Real                                            penaltySlope,
 		const Real                                            penaltyCurve,
-		const boost::shared_ptr<EndCriteria>&                 endCriteria )
+		const EndCriteria&                                    endCriteria )
 		: model_(model->clone()), volTS_(volTS), swapIndices_(swapIndices),  // we clone the model to be able to work on it directly
 		  sigmaMin_(0.0), sigmaMax_(sigmaMax), slopeMin_(0.0), slopeMax_(slopeMax), curveMin_(0.0), curveMax_(curveMax),
 		  sigmaWeight_(sigmaWeight), slopeWeight_(slopeWeight), curveWeight_(curveWeight),
@@ -465,10 +465,10 @@ namespace QuantLib {
 		Objective obj(this, isInput, isOutput);
 		Array x = obj.initialise();
 		Problem problem(obj, constraint, x);
-		LevenbergMarquardt optimizationMethod(epsfcn, endCriteria_->rootEpsilon(), endCriteria_->gradientNormEpsilon());  // (epsfcn, xtol, gtol)
+		LevenbergMarquardt optimizationMethod(epsfcn, endCriteria_.rootEpsilon(), endCriteria_.gradientNormEpsilon());  // (epsfcn, xtol, gtol)
 		// EndCriteria endCriteria(maxfev, 100 /* unused */, 0 /* unused */, ftol, 0 /* unused */);
 		// calibrate
-		optimizationMethod.minimize(problem,*endCriteria_);  // here we use maxfev and ftol
+		optimizationMethod.minimize(problem,endCriteria_);  // here we use maxfev and ftol
 		calibratedModel_ = obj.model(problem.currentValue());
 		return optimizationMethod.getInfo();
 	}
