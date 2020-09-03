@@ -56,12 +56,14 @@ namespace QuantLib {
       public:
         class option;
         Real conversionRatio() const { return conversionRatio_; }
-        const DividendSchedule& dividends() const { return dividends_; }
+		const Callability::Type conversionType() const { return conversionType_; }
+		const DividendSchedule& dividends() const { return dividends_; }
         const CallabilitySchedule& callability() const { return callability_; }
         const Handle<Quote>& creditSpread() const { return creditSpread_; }
       protected:
         ConvertibleBond(const ext::shared_ptr<Exercise>& exercise,
                         Real conversionRatio,
+						const Callability::Type conversionType,
                         const DividendSchedule& dividends,
                         const CallabilitySchedule& callability,
                         const Handle<Quote>& creditSpread,
@@ -71,8 +73,9 @@ namespace QuantLib {
                         Real redemption);
         void performCalculations() const;
         Real conversionRatio_;
-        CallabilitySchedule callability_;
-        DividendSchedule dividends_;
+		Callability::Type conversionType_;
+		CallabilitySchedule callability_;
+		DividendSchedule dividends_;
         Handle<Quote> creditSpread_;
         ext::shared_ptr<option> option_;
     };
@@ -89,6 +92,7 @@ namespace QuantLib {
         ConvertibleZeroCouponBond(
                     const ext::shared_ptr<Exercise>& exercise,
                     Real conversionRatio,
+					const Callability::Type conversionType,
                     const DividendSchedule& dividends,
                     const CallabilitySchedule& callability,
                     const Handle<Quote>& creditSpread,
@@ -111,6 +115,7 @@ namespace QuantLib {
         ConvertibleFixedCouponBond(
                 const ext::shared_ptr<Exercise>& exercise,
                 Real conversionRatio,
+				const Callability::Type conversionType,
                 const DividendSchedule& dividends,
                 const CallabilitySchedule& callability,
                 const Handle<Quote>& creditSpread,
@@ -134,6 +139,7 @@ namespace QuantLib {
         ConvertibleFloatingRateBond(
                 const ext::shared_ptr<Exercise>& exercise,
                 Real conversionRatio,
+				const Callability::Type conversionType,
                 const DividendSchedule& dividends,
                 const CallabilitySchedule& callability,
                 const Handle<Quote>& creditSpread,
@@ -155,6 +161,7 @@ namespace QuantLib {
         option(const ConvertibleBond* bond,
                const ext::shared_ptr<Exercise>& exercise,
                Real conversionRatio,
+			   const Callability::Type conversionType,
                const DividendSchedule& dividends,
                const CallabilitySchedule& callability,
                const Handle<Quote>& creditSpread,
@@ -169,6 +176,7 @@ namespace QuantLib {
       private:
         const ConvertibleBond* bond_;
         Real conversionRatio_;
+		Callability::Type conversionType_;
         CallabilitySchedule callability_;
         DividendSchedule  dividends_;
         Handle<Quote> creditSpread_;
@@ -189,6 +197,7 @@ namespace QuantLib {
           redemption(Null<Real>()) {}
 
         Real conversionRatio;
+		Callability::Type conversionType;
         Handle<Quote> creditSpread;
         DividendSchedule dividends;
         std::vector<Date> dividendDates;

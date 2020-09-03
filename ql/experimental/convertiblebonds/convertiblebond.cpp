@@ -33,6 +33,7 @@ namespace QuantLib {
     ConvertibleBond::ConvertibleBond(
             const ext::shared_ptr<Exercise>&,
             Real conversionRatio,
+			const Callability::Type conversionType,
             const DividendSchedule& dividends,
             const CallabilitySchedule& callability,
             const Handle<Quote>& creditSpread,
@@ -41,7 +42,7 @@ namespace QuantLib {
             const Schedule& schedule,
             Real)
     : Bond(settlementDays, schedule.calendar(), issueDate),
-      conversionRatio_(conversionRatio), callability_(callability),
+      conversionRatio_(conversionRatio), conversionType_(conversionType), callability_(callability),
       dividends_(dividends), creditSpread_(creditSpread) {
 
         maturityDate_ = schedule.endDate();
@@ -67,6 +68,7 @@ namespace QuantLib {
     ConvertibleZeroCouponBond::ConvertibleZeroCouponBond(
                           const ext::shared_ptr<Exercise>& exercise,
                           Real conversionRatio,
+						  const Callability::Type conversionType,
                           const DividendSchedule& dividends,
                           const CallabilitySchedule& callability,
                           const Handle<Quote>& creditSpread,
@@ -75,7 +77,7 @@ namespace QuantLib {
                           const DayCounter& dayCounter,
                           const Schedule& schedule,
                           Real redemption)
-    : ConvertibleBond(exercise, conversionRatio, dividends, callability,
+    : ConvertibleBond(exercise, conversionRatio, conversionType, dividends, callability,
                       creditSpread, issueDate, settlementDays,
                       schedule, redemption) {
 
@@ -85,7 +87,7 @@ namespace QuantLib {
         setSingleRedemption(100.0, redemption, maturityDate_);
 
         option_ = ext::shared_ptr<option>(
-                           new option(this, exercise, conversionRatio,
+                           new option(this, exercise, conversionRatio, conversionType,
                                       dividends, callability, creditSpread,
                                       cashflows_, dayCounter, schedule,
                                       issueDate, settlementDays, redemption));
@@ -95,6 +97,7 @@ namespace QuantLib {
     ConvertibleFixedCouponBond::ConvertibleFixedCouponBond(
                           const ext::shared_ptr<Exercise>& exercise,
                           Real conversionRatio,
+						  const Callability::Type conversionType,
                           const DividendSchedule& dividends,
                           const CallabilitySchedule& callability,
                           const Handle<Quote>& creditSpread,
@@ -104,7 +107,7 @@ namespace QuantLib {
                           const DayCounter& dayCounter,
                           const Schedule& schedule,
                           Real redemption)
-    : ConvertibleBond(exercise, conversionRatio, dividends, callability,
+    : ConvertibleBond(exercise, conversionRatio, conversionType, dividends, callability,
                       creditSpread, issueDate, settlementDays,
                       schedule, redemption) {
 
@@ -119,7 +122,7 @@ namespace QuantLib {
         QL_ENSURE(redemptions_.size() == 1, "multiple redemptions created");
 
         option_ = ext::shared_ptr<option>(
-                           new option(this, exercise, conversionRatio,
+                           new option(this, exercise, conversionRatio, conversionType,
                                       dividends, callability, creditSpread,
                                       cashflows_, dayCounter, schedule,
                                       issueDate, settlementDays, redemption));
@@ -129,6 +132,7 @@ namespace QuantLib {
     ConvertibleFloatingRateBond::ConvertibleFloatingRateBond(
                           const ext::shared_ptr<Exercise>& exercise,
                           Real conversionRatio,
+						  const Callability::Type conversionType,
                           const DividendSchedule& dividends,
                           const CallabilitySchedule& callability,
                           const Handle<Quote>& creditSpread,
@@ -140,7 +144,7 @@ namespace QuantLib {
                           const DayCounter& dayCounter,
                           const Schedule& schedule,
                           Real redemption)
-    : ConvertibleBond(exercise, conversionRatio, dividends, callability,
+    : ConvertibleBond(exercise, conversionRatio, conversionType,dividends, callability,
                       creditSpread, issueDate, settlementDays,
                       schedule, redemption) {
 
@@ -157,7 +161,7 @@ namespace QuantLib {
         QL_ENSURE(redemptions_.size() == 1, "multiple redemptions created");
 
         option_ = ext::shared_ptr<option>(
-                           new option(this, exercise, conversionRatio,
+                           new option(this, exercise, conversionRatio, conversionType,
                                       dividends, callability, creditSpread,
                                       cashflows_, dayCounter, schedule,
                                       issueDate, settlementDays, redemption));
@@ -169,6 +173,7 @@ namespace QuantLib {
             const ConvertibleBond* bond,
             const ext::shared_ptr<Exercise>& exercise,
             Real conversionRatio,
+			const Callability::Type conversionType,
             const DividendSchedule& dividends,
             const CallabilitySchedule& callability,
             const Handle<Quote>& creditSpread,
@@ -184,6 +189,7 @@ namespace QuantLib {
                              *redemption/conversionRatio)),
                             exercise),
       bond_(bond), conversionRatio_(conversionRatio),
+	  conversionType_(conversionType),
       callability_(callability), dividends_(dividends),
       creditSpread_(creditSpread), cashflows_(cashflows),
       dayCounter_(dayCounter), issueDate_(issueDate), schedule_(schedule),
@@ -204,6 +210,7 @@ namespace QuantLib {
         QL_REQUIRE(moreArgs != 0, "wrong argument type");
 
         moreArgs->conversionRatio = conversionRatio_;
+		moreArgs->conversionType = conversionType_;
 
         Date settlement = bond_->settlementDate();
 

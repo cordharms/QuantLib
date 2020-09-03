@@ -154,10 +154,15 @@ namespace QuantLib {
         Array grid = adjustedGrid();
         for (Size j=0; j<values_.size(); j++) {
             Real payoff = arguments_.conversionRatio*grid[j];
-            if (values_[j] <= payoff) {
+            if (values_[j] <= payoff && arguments_.conversionType == Callability::Call) {
                 values_[j] = payoff;
                 conversionProbability_[j] = 1.0;
             }
+			if (values_[j] >= payoff && arguments_.conversionType == Callability::Put) {
+				values_[j] = payoff;
+				conversionProbability_[j] = 1.0;
+				
+			}
         }
     }
 
