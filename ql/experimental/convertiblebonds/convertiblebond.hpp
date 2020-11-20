@@ -219,6 +219,134 @@ namespace QuantLib {
         : public GenericEngine<ConvertibleBond::option::arguments,
                                ConvertibleBond::option::results> {};
 
+
+	class ContingentConvertible : public ConvertibleBond {
+	public:
+		class optionCoCo;
+		ContingentConvertible(
+			Real conversionRatio,
+			const Callability::Type conversionType,
+			const DividendSchedule& dividends,
+			const CallabilitySchedule& callability,
+			const Handle<Quote>& creditSpread,
+			const Date& issueDate,
+			Natural settlementDays,
+			const Schedule& schedule,
+			Real cocoTrigger,
+			bool isCoco,
+			bool isWriteDown,
+			Real cocoWriteDownRR,
+			bool isRiskyDiscountingWD,
+			Real redemption = 100);
+	protected:
+		ext::shared_ptr<optionCoCo> optionCoCo_;
+	private:
+		void performCalculations() const;
+		Real cocoTrigger_;
+		bool isCoco_;
+		bool isWriteDown_;
+		Real cocoWriteDownRR_;
+		bool isRiskyDiscountingWD_;
+	};
+
+	class ContingentConvertible::optionCoCo : public ConvertibleBond::option {
+	public:
+		class arguments;
+		class engine;
+		optionCoCo(const ContingentConvertible* bond,
+			Real conversionRatio,
+			const Callability::Type conversionType,
+			const DividendSchedule& dividends,
+			const CallabilitySchedule& callability,
+			const Handle<Quote>& creditSpread,
+			const Leg& cashflows,
+			const DayCounter& dayCounter,
+			const Schedule& schedule,
+			const Date& issueDate,
+			Natural settlementDays,
+			Real redemption,
+			Real cocoTrigger,
+			bool isCoco,
+			bool isWriteDown,
+			Real cocoWriteDownRR,
+			bool isRiskyDiscountingWD);
+
+		void setupArguments(PricingEngine::arguments*) const;
+	private:
+		const ContingentConvertible* bond_;
+		Real cocoTrigger_;
+		bool isCoco_;
+		bool isWriteDown_;
+		bool isRiskyDiscountingWD_;
+		Real cocoWriteDownRR_;
+	};
+
+	class ContingentConvertible::optionCoCo::arguments
+		: public ConvertibleBond::option::arguments {
+	public:
+		//coco extension
+		Real cocoTrigger;
+		bool isCoco;
+		bool isWriteDown;
+		Real cocoWriteDownRR;
+		bool isRiskyDiscountingWD;
+	};
+
+	class ContingentConvertible::optionCoCo::engine
+		: public GenericEngine<ContingentConvertible::optionCoCo::arguments,
+		ContingentConvertible::optionCoCo::results> {};
+
+	//! CoCo floating-rate bond
+	/*! \warning Most methods inherited from Bond (such as yield or
+	the yield-based dirtyPrice and cleanPrice) refer to
+	the underlying plain-vanilla bond and do not take
+	convertibility and callability into account.
+	*/
+	class CoCoFloatingRateBond : public ContingentConvertible {
+	public:
+		CoCoFloatingRateBond(
+			Real conversionRatio,
+			const Callability::Type conversionType,
+			const DividendSchedule& dividends,
+			const CallabilitySchedule& callability,
+			const Handle<Quote>& creditSpread,
+			const Date& issueDate,
+			Natural settlementDays,
+			const ext::shared_ptr<IborIndex>& index,
+			Natural fixingDays,
+			const std::vector<Real>& gearings,
+			const std::vector<Spread>& spreads,
+			const DayCounter& dayCounter,
+			const Schedule& schedule,
+			Real cocoTrigger,
+			bool isCoco,
+			bool isWriteDown,
+			Real cocoWriteDownRR,
+			bool isRiskyDiscountingWD,
+			Real redemption = 100);
+	};
+
+	class CoCoFixedCouponBond : public ContingentConvertible {
+	public:
+		CoCoFixedCouponBond(
+			Real conversionRatio,
+			const Callability::Type conversionType,
+			const DividendSchedule& dividends,
+			const CallabilitySchedule& callability,
+			const Handle<Quote>& creditSpread,
+			const Date& issueDate,
+			Natural settlementDays,
+			const std::vector<Rate>& coupons,
+			const DayCounter& dayCounter,
+			const Schedule& schedule,
+			Real cocoTrigger,
+			bool isCoco,
+			bool isWriteDown,
+			Real cocoWriteDownRR,
+			bool isRiskyDiscountingWD,
+			Real redemption = 100);
+	};
+
 }
 
 #endif

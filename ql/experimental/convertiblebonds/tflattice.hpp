@@ -42,9 +42,14 @@ namespace QuantLib {
                                     Spread creditSpread,
                                     Volatility volatility,
                                     Spread divYield);
-
+		TsiveriotisFernandesLattice(const ext::shared_ptr<T>& tree,
+			Rate riskFreeRate,
+			Time end,
+			Size steps,
+			Spread creditSpread,
+			Volatility volatility,
+			Spread divYield, bool isCoCoWriteDown);
         Spread creditSpread() const { return creditSpread_; };
-
       protected:
         void stepback(Size i,
                       const Array& values,
@@ -58,6 +63,7 @@ namespace QuantLib {
 
       private:
         Spread creditSpread_;
+		bool isCocoWriteDown_;
     };
 
 
@@ -78,7 +84,24 @@ namespace QuantLib {
                    "probability (" << this->pu_ << ") higher than one");
         QL_REQUIRE(this->pu_>=0.0,
                    "negative (" << this->pu_ << ") probability");
+		isCocoWriteDown_ = false;
     }
+	template <class T>
+	TsiveriotisFernandesLattice<T>::TsiveriotisFernandesLattice(
+		const ext::shared_ptr<T>& tree,
+		Rate riskFreeRate,
+		Time end,
+		Size steps,
+		Spread creditSpread,
+		Volatility sigma,
+		Spread divYield, bool isCocoWriteDown)
+		: BlackScholesLattice<T>(tree, riskFreeRate, end, steps),
+		creditSpread_(creditSpread), isCocoWriteDown_(isCocoWriteDown){
+		QL_REQUIRE(this->pu_ <= 1.0,
+			"probability (" << this->pu_ << ") higher than one");
+		QL_REQUIRE(this->pu_ >= 0.0,
+			"negative (" << this->pu_ << ") probability");
+	}
 
     template <class T>
     void TsiveriotisFernandesLattice<T>::stepback(
@@ -102,7 +125,7 @@ namespace QuantLib {
 
             // Use blended discounting rate
             newSpreadAdjustedRate[j] =
-                newConversionProbability[j] * this->riskFreeRate_ +
+                newConversionProbability[j] * (this->riskFreeRate_ + (isCocoWriteDown_ ? creditSpread_ : 0)) +
                 (1-newConversionProbability[j])*(this->riskFreeRate_+creditSpread_);
 
             newValues[j] =

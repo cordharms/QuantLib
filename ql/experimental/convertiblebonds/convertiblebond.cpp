@@ -300,4 +300,161 @@ namespace QuantLib {
                    "different number of coupon dates and amounts");
     }
 
+	ContingentConvertible::optionCoCo::optionCoCo(
+		const ContingentConvertible* bond,
+		Real conversionRatio,
+		const Callability::Type conversionType,
+		const DividendSchedule& dividends,
+		const CallabilitySchedule& callability,
+		const Handle<Quote>& creditSpread,
+		const Leg& cashflows,
+		const DayCounter& dayCounter,
+		const Schedule& schedule,
+		const Date& issueDate,
+		Natural settlementDays,
+		Real redemption,
+		Real cocoTrigger,
+		bool isCoco,
+		bool isWriteDown,
+		Real cocoWriteDownRR,
+		bool isRiskyDiscountingWD
+		)
+		: ConvertibleBond::option(bond, ext::shared_ptr<Exercise>(new AmericanExercise(schedule.endDate())),conversionRatio, conversionType, dividends, callability, creditSpread, cashflows, dayCounter,
+				schedule, issueDate, settlementDays, redemption),bond_(bond) {
+		registerWith(ext::shared_ptr<ContingentConvertible>(const_cast<ContingentConvertible*>(bond),
+			null_deleter()));
+		cocoTrigger_ = cocoTrigger;
+		isCoco_ = isCoco;
+		isWriteDown_ = isWriteDown;
+		cocoWriteDownRR_ = cocoWriteDownRR;
+		isRiskyDiscountingWD_ = isRiskyDiscountingWD;
+	}
+
+
+	void ContingentConvertible::optionCoCo::setupArguments(
+		PricingEngine::arguments* args) const {
+
+		ConvertibleBond::option::setupArguments(args);
+
+		ContingentConvertible::optionCoCo::arguments* moreArgs =
+			dynamic_cast<ContingentConvertible::optionCoCo::arguments*>(args);
+		QL_REQUIRE(moreArgs != 0, "wrong argument type");
+
+		moreArgs->cocoTrigger = cocoTrigger_;
+		moreArgs->isCoco = isCoco_;
+		moreArgs->isWriteDown = isWriteDown_;
+		moreArgs->cocoWriteDownRR = cocoWriteDownRR_;
+		moreArgs->isRiskyDiscountingWD = isRiskyDiscountingWD_;
+	}
+
+	ContingentConvertible::ContingentConvertible(
+		Real conversionRatio,
+		const Callability::Type conversionType,
+		const DividendSchedule& dividends,
+		const CallabilitySchedule& callability,
+		const Handle<Quote>& creditSpread,
+		const Date& issueDate,
+		Natural settlementDays,
+		const Schedule& schedule,
+		Real cocoTrigger,
+		bool isCoco,
+		bool isWriteDown,
+		Real cocoWriteDownRR, 
+		bool isRiskyDiscountingWD,
+		Real redemption)
+		: ConvertibleBond(ext::shared_ptr<Exercise>(new AmericanExercise(schedule.endDate())),conversionRatio, conversionType, dividends, callability, creditSpread, issueDate, settlementDays,
+			schedule, redemption), cocoTrigger_(cocoTrigger), isCoco_(isCoco), isWriteDown_(isWriteDown), cocoWriteDownRR_(cocoWriteDownRR), isRiskyDiscountingWD_(isRiskyDiscountingWD){
+
+		QL_ENSURE(cocoWriteDownRR <= 1, "recovery rate cannot be greater than 1.");
+		QL_ENSURE(cocoWriteDownRR >= 0, "recovery rate cannot be smaller than 0.");
+		QL_ENSURE(cocoTrigger >= 0, "cocoTrigger cannot be smaller than 0.");
+	}
+
+	CoCoFloatingRateBond::CoCoFloatingRateBond(
+		Real conversionRatio,
+		const Callability::Type conversionType,
+		const DividendSchedule& dividends,
+		const CallabilitySchedule& callability,
+		const Handle<Quote>& creditSpread,
+		const Date& issueDate,
+		Natural settlementDays,
+		const ext::shared_ptr<IborIndex>& index,
+		Natural fixingDays,
+		const std::vector<Real>& gearings,
+		const std::vector<Spread>& spreads,
+		const DayCounter& dayCounter,
+		const Schedule& schedule,
+		Real cocoTrigger,
+		bool isCoco,
+		bool isWriteDown,
+		Real cocoWriteDownRR, 
+		bool isRiskyDiscountingWD,
+		Real redemption)
+		: ContingentConvertible(conversionRatio, conversionType, dividends, callability,
+			creditSpread, issueDate, settlementDays,
+			schedule, cocoTrigger, isCoco, isWriteDown, cocoWriteDownRR, isRiskyDiscountingWD,  redemption) {
+
+		// !!! notional forcibly set to 100
+		cashflows_ = IborLeg(schedule, index)
+			.withPaymentDayCounter(dayCounter)
+			.withNotionals(100.0)
+			.withPaymentAdjustment(schedule.businessDayConvention())
+			.withFixingDays(fixingDays)
+			.withSpreads(spreads)
+			.withGearings(gearings);
+
+		addRedemptionsToCashflows(std::vector<Real>(1, redemption));
+
+		QL_ENSURE(redemptions_.size() == 1, "multiple redemptions created");
+
+		optionCoCo_ = ext::shared_ptr<optionCoCo>(
+			new optionCoCo(this, conversionRatio, conversionType,
+				dividends, callability, creditSpread,
+				cashflows_, dayCounter, schedule,
+				issueDate, settlementDays, redemption, cocoTrigger, isCoco, isWriteDown, cocoWriteDownRR, isRiskyDiscountingWD));
+		registerWith(index);
+	}
+	void ContingentConvertible::performCalculations() const {
+		optionCoCo_->setPricingEngine(engine_);
+		NPV_ = settlementValue_ = optionCoCo_->NPV();
+		errorEstimate_ = Null<Real>();
+	}
+
+	CoCoFixedCouponBond::CoCoFixedCouponBond(
+		Real conversionRatio,
+		const Callability::Type conversionType,
+		const DividendSchedule& dividends,
+		const CallabilitySchedule& callability,
+		const Handle<Quote>& creditSpread,
+		const Date& issueDate,
+		Natural settlementDays,
+		const std::vector<Rate>& coupons,
+		const DayCounter& dayCounter,
+		const Schedule& schedule,
+		Real cocoTrigger,
+		bool isCoco,
+		bool isWriteDown,
+		Real cocoWriteDownRR,
+		bool isRiskyDiscountingWD,
+		Real redemption)
+		: ContingentConvertible(conversionRatio, conversionType, dividends, callability,
+			creditSpread, issueDate, settlementDays,
+			schedule, cocoTrigger, isCoco, isWriteDown, cocoWriteDownRR, isRiskyDiscountingWD, redemption) {
+
+		// !!! notional forcibly set to 100
+		cashflows_ = FixedRateLeg(schedule)
+			.withNotionals(100.0)
+			.withCouponRates(coupons, dayCounter)
+			.withPaymentAdjustment(schedule.businessDayConvention());
+
+		addRedemptionsToCashflows(std::vector<Real>(1, redemption));
+
+		QL_ENSURE(redemptions_.size() == 1, "multiple redemptions created");
+
+		optionCoCo_ = ext::shared_ptr<optionCoCo>(
+			new optionCoCo(this, conversionRatio, conversionType,
+				dividends, callability, creditSpread,
+				cashflows_, dayCounter, schedule,
+				issueDate, settlementDays, redemption, cocoTrigger, isCoco, isWriteDown, cocoWriteDownRR, isRiskyDiscountingWD));
+	}
 }

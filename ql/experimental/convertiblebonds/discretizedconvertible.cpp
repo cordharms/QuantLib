@@ -235,5 +235,158 @@ namespace QuantLib {
         return grid;
     }
 
+
+	DiscretizedCoCo::DiscretizedCoCo(
+		const ContingentConvertible::optionCoCo::arguments& args,
+		const ext::shared_ptr<GeneralizedBlackScholesProcess>& process,
+		const TimeGrid& grid)
+		: DiscretizedConvertible(args, process, grid), arguments_(args) {
+		
+		defaultedCoupon_ = 0;
+	}
+
+
+	void DiscretizedCoCo::addCoupon(Size i) {
+		Array grid = adjustedGrid();
+		Real coupon = 0;
+		for (Size j = 0; j < values_.size(); j++) {
+			coupon += arguments_.couponAmounts[i] * (1-conversionProbability_[j]) + arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *conversionProbability_[j];
+		}
+		values_ += (coupon / values_.size());
+	}
+
+	void DiscretizedCoCo::applyConvertibility() {
+		Array grid = adjustedGrid();
+		addDefaultedCoupon();
+		for (Size j = 0; j < values_.size(); j++) {
+			Real payoff = arguments_.isWriteDown ? arguments_.cocoWriteDownRR*arguments_.redemption : arguments_.conversionRatio*grid[j];
+			//discount payoff from maturity (last coupon) in case of Write down (RR is not received directly after CoCo event!)
+			if (arguments_.isWriteDown) {
+				if (arguments_.isRiskyDiscountingWD)
+					payoff *=
+					std::exp(-(process_->riskFreeRate()->zeroRate(couponTimes_[couponTimes_.size()-1], Continuous, Annual, true) + arguments_.creditSpread->value())*
+					(couponTimes_[couponTimes_.size() - 1] - time()));
+				else
+					payoff *= process_->riskFreeRate()->discount((couponTimes_[couponTimes_.size() - 1] - time()));
+				if (grid[j] < arguments_.cocoTrigger) {
+					values_[j] = payoff;
+					conversionProbability_[j] = 1.0;
+					values_[j] += defaultedCoupon_; //future interest based on recovery rate
+				}
+			}
+		}
+	}
+
+	void DiscretizedCoCo::applyCallability(Size i, bool convertible) {
+		Size j;
+		Array grid = adjustedGrid();
+		switch (arguments_.callabilityTypes[i]) {
+		case Callability::Call:
+			if (arguments_.callabilityTriggers[i] != Null<Real>()) {
+				Real conversionValue =
+					arguments_.redemption / arguments_.conversionRatio;
+				Real trigger =
+					conversionValue*arguments_.callabilityTriggers[i];
+				for (j = 0; j < values_.size(); j++) {
+					// the callability is conditioned by the trigger...
+					if (grid[j] >= trigger) {
+						// ...and might trigger conversion
+						values_[j] =
+							std::min(std::max(
+								arguments_.callabilityPrices[i],
+								arguments_.conversionRatio*grid[j]),
+								values_[j]);
+					}
+				}
+			}
+			else if (convertible) {
+				for (j = 0; j < values_.size(); j++) {
+					// exercising the callability cannot trigger conversion for cocos
+					values_[j] =
+						std::min(arguments_.callabilityPrices[i], values_[j]);
+				}
+			}
+			else {
+				for (j = 0; j < values_.size(); j++) {
+					values_[j] = std::min(arguments_.callabilityPrices[i],
+						values_[j]);
+				}
+			}
+			break;
+		case Callability::Put:
+			for (j = 0; j < values_.size(); j++) {
+				values_[j] = std::max(values_[j],
+					arguments_.callabilityPrices[i]);
+			}
+			break;
+		default:
+			QL_FAIL("unknown callability type");
+		}
+	}
+	void DiscretizedCoCo::postAdjustValuesImpl() {
+
+		bool convertible = true;
+
+		for (Size i = 0; i < callabilityTimes_.size(); i++) {
+			if (isOnTime(callabilityTimes_[i]))
+				applyCallability(i, convertible);
+		}
+		for (Size i = 0; i < couponTimes_.size(); i++) {
+			if (isOnTime(couponTimes_[i]))
+				addCoupon(i);
+		}
+		applyConvertibility();
+	}
+
+
+	void DiscretizedCoCo::reset(Size size) {
+
+		// Set to bond redemption values
+		values_ = Array(size, arguments_.redemption);
+
+		// coupon amounts should be added when adjusting
+		// values_ = Array(size, arguments_.cashFlows.back()->amount());
+
+		conversionProbability_ = Array(size, 0.0);
+		spreadAdjustedRate_ = Array(size, 0.0);
+
+		DayCounter rfdc = process_->riskFreeRate()->dayCounter();
+
+		// this takes care of convertibility and conversion probabilities
+		adjustValues();
+
+		Real creditSpread = arguments_.creditSpread->value();
+
+		Date exercise = arguments_.exercise->lastDate();
+
+		Rate riskFreeRate =
+			process_->riskFreeRate()->zeroRate(exercise, rfdc,
+				Continuous, NoFrequency);
+
+		defaultedCoupon_ = 0;
+
+		// Calculate blended discount rate to be used on roll back.
+		for (Size j = 0; j < values_.size(); j++) {
+			spreadAdjustedRate_[j] =
+				conversionProbability_[j] * riskFreeRate + arguments_.isRiskyDiscountingWD ? creditSpread : 0
+				(1 - conversionProbability_[j])*(riskFreeRate + creditSpread);
+		}
+	}
+
+	//we have to discount all cf for each time of the grid. Reason: Grid not available in this object, therefore we do not know dt_ for discounting.
+	void DiscretizedCoCo::addDefaultedCoupon() {
+		defaultedCoupon_ = 0;
+		for (Size i = 0; i < arguments_.couponAmounts.size(); i++) {
+			if (couponTimes_[i] > time()) {
+				if (arguments_.isRiskyDiscountingWD)
+					defaultedCoupon_ += arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *
+					std::exp(-(process_->riskFreeRate()->zeroRate(couponTimes_[i], Continuous, Annual, true) + arguments_.creditSpread->value())*(couponTimes_[i] - time()));
+				else
+					defaultedCoupon_ += arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *
+					process_->riskFreeRate()->discount((couponTimes_[i] - time()));
+
+			}
+		}
+	}
 }
 

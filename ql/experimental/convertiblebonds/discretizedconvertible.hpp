@@ -65,19 +65,37 @@ namespace QuantLib {
       protected:
         void postAdjustValuesImpl();
         Array conversionProbability_, spreadAdjustedRate_, dividendValues_;
+		Disposable<Array> adjustedGrid() const;
+		ConvertibleBond::option::arguments arguments_;
+		std::vector<Time> stoppingTimes_;
+		std::vector<Time> callabilityTimes_;
+		std::vector<Time> couponTimes_;
+		ext::shared_ptr<GeneralizedBlackScholesProcess> process_;
 
       private:
-        Disposable<Array> adjustedGrid() const;
+		void addCoupon(Size);
         void applyConvertibility();
         void applyCallability(Size, bool convertible);
-        void addCoupon(Size);
-        ConvertibleBond::option::arguments arguments_;
-        ext::shared_ptr<GeneralizedBlackScholesProcess> process_;
-        std::vector<Time> stoppingTimes_;
-        std::vector<Time> callabilityTimes_;
-        std::vector<Time> couponTimes_;
         std::vector<Time> dividendTimes_;
     };
+
+	class DiscretizedCoCo : public DiscretizedConvertible {
+	public:
+		DiscretizedCoCo(
+			const ContingentConvertible::optionCoCo::arguments&,
+			const ext::shared_ptr<GeneralizedBlackScholesProcess>& process,
+			const TimeGrid& grid = TimeGrid());
+		void reset(Size size);
+	protected:
+		ContingentConvertible::optionCoCo::arguments arguments_;
+		void postAdjustValuesImpl();
+	private:
+		void addCoupon(Size);
+		void addDefaultedCoupon();
+		void applyConvertibility();
+		void applyCallability(Size, bool convertible);
+		Real defaultedCoupon_;
+	};
 
 }
 
