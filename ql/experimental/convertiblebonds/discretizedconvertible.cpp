@@ -247,17 +247,12 @@ namespace QuantLib {
 
 
 	void DiscretizedCoCo::addCoupon(Size i) {
-		Array grid = adjustedGrid();
-		Real coupon = 0;
-		for (Size j = 0; j < values_.size(); j++) {
-			coupon += arguments_.couponAmounts[i] * (1-conversionProbability_[j]) + arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *conversionProbability_[j];
-		}
-		values_ += (coupon / values_.size());
+		values_ += arguments_.couponAmounts[i]; //if write down then whole future coupon has to be recalculated in applyConvertibility.
 	}
 
 	void DiscretizedCoCo::applyConvertibility() {
 		Array grid = adjustedGrid();
-		addDefaultedCoupon();
+		computeDefaultedCoupon();
 		for (Size j = 0; j < values_.size(); j++) {
 			Real payoff = arguments_.isWriteDown ? arguments_.cocoWriteDownRR*arguments_.redemption : arguments_.conversionRatio*grid[j];
 			//discount payoff from maturity (last coupon) in case of Write down (RR is not received directly after CoCo event!)
@@ -267,11 +262,17 @@ namespace QuantLib {
 					std::exp(-(process_->riskFreeRate()->zeroRate(couponTimes_[couponTimes_.size()-1], Continuous, Annual, true) + arguments_.creditSpread->value())*
 					(couponTimes_[couponTimes_.size() - 1] - time()));
 				else
-					payoff *= process_->riskFreeRate()->discount((couponTimes_[couponTimes_.size() - 1] - time()));
+					payoff *= process_->riskFreeRate()->discount(couponTimes_[couponTimes_.size() - 1]) / process_->riskFreeRate()->discount(time());
 				if (grid[j] < arguments_.cocoTrigger) {
 					values_[j] = payoff;
 					conversionProbability_[j] = 1.0;
 					values_[j] += defaultedCoupon_; //future interest based on recovery rate
+				}
+			}
+			else {
+				if (grid[j] < arguments_.cocoTrigger) {
+					values_[j] = payoff;
+					conversionProbability_[j] = 1.0;
 				}
 			}
 		}
@@ -374,16 +375,16 @@ namespace QuantLib {
 	}
 
 	//we have to discount all cf for each time of the grid. Reason: Grid not available in this object, therefore we do not know dt_ for discounting.
-	void DiscretizedCoCo::addDefaultedCoupon() {
+	void DiscretizedCoCo::computeDefaultedCoupon() {
 		defaultedCoupon_ = 0;
 		for (Size i = 0; i < arguments_.couponAmounts.size(); i++) {
-			if (couponTimes_[i] > time()) {
+			if (couponTimes_[i] >= time()) {
 				if (arguments_.isRiskyDiscountingWD)
 					defaultedCoupon_ += arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *
 					std::exp(-(process_->riskFreeRate()->zeroRate(couponTimes_[i], Continuous, Annual, true) + arguments_.creditSpread->value())*(couponTimes_[i] - time()));
 				else
 					defaultedCoupon_ += arguments_.couponAmounts[i] * arguments_.cocoWriteDownRR *
-					process_->riskFreeRate()->discount((couponTimes_[i] - time()));
+					process_->riskFreeRate()->discount(couponTimes_[i]) / process_->riskFreeRate()->discount(time());
 
 			}
 		}

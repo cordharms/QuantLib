@@ -91,7 +91,7 @@ namespace QuantLib {
 		void postAdjustValuesImpl();
 	private:
 		void addCoupon(Size);
-		void addDefaultedCoupon();
+		void computeDefaultedCoupon();
 		void applyConvertibility();
 		void applyCallability(Size, bool convertible);
 		Real defaultedCoupon_;
