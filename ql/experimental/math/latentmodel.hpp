@@ -359,7 +359,7 @@ namespace QuantLib {
             return copula_;
         }
 
-    public:
+
     //  protected:
         //! \name Latent model random factor number generator facility.
         //@{
@@ -548,9 +548,9 @@ namespace QuantLib {
             possibly drop the static policy and create a policy member
             in LatentModel)
         */
-        explicit LatentModel(const Real correlSqr, Size nVariables,
-            const typename copulaType::initTraits& ini = 
-                copulaType::initTraits());
+        explicit LatentModel(Real correlSqr,
+                             Size nVariables,
+                             const typename copulaType::initTraits& ini = copulaType::initTraits());
         /*! Constructs a LM with an arbitrary number of latent variables 
           depending only on one random factor with the same weight for all
           latent variables. The weight is observed and this constructor is
@@ -625,7 +625,7 @@ namespace QuantLib {
             QL_FAIL("Integration non implemented in Latent model.");
         }
         //@}
-    protected:
+
         // Ordering is: factorWeights_[iVariable][iFactor]
         mutable std::vector<std::vector<Real> > factorWeights_;
         /* This is a duplicated value from the data above chosen for memory 

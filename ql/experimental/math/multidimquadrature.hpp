@@ -56,7 +56,7 @@ namespace QuantLib {
         // real numbers, turns 1D quadratures into ND
         class VectorIntegrator : public GaussHermiteIntegration {
         public:
-            VectorIntegrator(Size n, Real mu = 0.0) 
+            explicit VectorIntegrator(Size n, Real mu = 0.0) 
             : GaussHermiteIntegration(n, mu) {}
 
             template <class F> // todo: fix copies.
@@ -152,7 +152,7 @@ namespace QuantLib {
 
         template <int intgDepth>
         Real scalarIntegrator(
-            ext::function<Real (const std::vector<Real>& arg1)> f, 
+            const ext::function<Real (const std::vector<Real>& arg1)>& f,
             const Real mFctr) const 
         {
             varBuffer_[intgDepth-1] = mFctr;
@@ -178,7 +178,7 @@ namespace QuantLib {
                ext::placeholders::_1)
             );
         }
-    private:
+
         // Same object for all dimensions poses problems when using the 
         //   parallelized integrals version.
         //! The actual integrators.
@@ -249,7 +249,7 @@ namespace QuantLib {
     //! Terminal integrand; scalar function version
     template<> 
     inline Real GaussianQuadMultidimIntegrator::scalarIntegrator<1>(
-        ext::function<Real (const std::vector<Real>& arg1)> f,
+        const ext::function<Real (const std::vector<Real>& arg1)>& f,
         const Real mFctr) const
     {
         varBuffer_[0] = mFctr;

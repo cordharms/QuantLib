@@ -59,6 +59,9 @@
     <ClCompile Include="calendars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="callablebonds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="capfloor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -164,6 +167,9 @@
     <ClCompile Include="fdheston.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fdcir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="fdmlinearop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -192,6 +198,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="hybridhestonhullwhiteprocess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="indexes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="inflation.cpp">
@@ -468,6 +477,9 @@
     <ClCompile Include="fittedbonddiscountcurve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ultimateforwardtermstructure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="americanoption.hpp">
@@ -516,6 +528,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="calendars.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="callablebonds.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="capfloor.hpp">
@@ -623,6 +638,9 @@
     <ClInclude Include="fdheston.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fdcir.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="fdmlinearop.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -651,6 +669,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hybridhestonhullwhiteprocess.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="indexes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inflation.hpp">
@@ -933,6 +954,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fittedbonddiscountcurve.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ultimateforwardtermstructure.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

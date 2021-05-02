@@ -1,128 +1,79 @@
-Changes for QuantLib 1.18:
+Changes for QuantLib 1.20:
 ==========================
 
-QuantLib 1.18 includes 34 pull requests from several contributors.
+QuantLib 1.20 includes 24 pull requests from several contributors.
 
 The most notable changes are included below.
 A detailed list of changes is available in ChangeLog.txt and at
-<https://github.com/lballabio/QuantLib/milestone/14?closed=1>.
+<https://github.com/lballabio/QuantLib/milestone/16?closed=1>.
 
 Portability
 -----------
 
-- As announced in the past release, support of Visual C++ 2010 is
-  dropped.  Also, we'll probably deprecate Visual C++ 2012 in the next
-  release in order to drop it around the end of 2020.
+- Support for Visual C++ 2012 is being deprecated.  It will be dropped
+  after the next release in order to enable use of C++11 features.
 
-Build
------
-
-- Cmake now installs headers with the correct folder hierarchy (thanks
-  to Cheng Li).
-
-- The `--enable-unity-build` flag passed to configure now also causes
-  the test suite to be built as a single source file.
-
-- The Visual Studio projects now allow enabling unity builds as
-  described at
-  <https://devblogs.microsoft.com/cppblog/support-for-unity-jumbo-files-in-visual-studio-2017-15-8-experimental/>
-
-Term structures
----------------
-
-- A new `GlobalBootstrap` class can now be used with
-  `PiecewiseYieldCurve` and other bootstrapped curves (thanks to Peter
-  Caspers).  It allows to produce curves close to Bloomberg's.
-
-- The experimental `SofrFutureRateHelper` class and its parent
-  `OvernightIndexFutureRateHelper` can now choose to use either
-  compounding or averaging, in order to accommodate different
-  conventions for 1M and 3M SOFR futures (thanks to GitHub user
-  `tani3010`).
-
-- The `FraRateHelper` class has new constructors that take IMM start /
-  end offsets (thanks to Peter Caspers).
-
-- It is now possible to pass explicit minimum and maximum values to
-  the `IterativeBootstrap` class.  The accuracy parameter was also
-  moved to the same class; passing it to the curve constructor is now
-  deprecated.
+- It is now possible to opt into using `std::tuple` instead of
+  `boost::tuple` when the compiler allows it.  The default is still to
+  use the Boost implementation.  The feature can be enabled by
+  uncommenting the `QL_USE_STD_TUPLE` macro in `ql/userconfig.hpp` on
+  Visual C++ or by passing the `--enable-std-tuple` switch to
+  `./configure` on other systems.  The `--enable-std-tuple` switch is
+  also implied by `--enable-std-classes`.  (Thanks to Joseph Wang.)
 
 Instruments
 -----------
 
-- It is now possible to build fixed-rate bonds with an arbitrary
-  schedule, even without a regular tenor (thanks to Steven Van Haren).
+- Added mixing-factor parameter to Heston finite-differences barrier,
+  rebate and double-barrier engines (thanks to Jack Gillett).
+
+- Added a few additional results to Black swaption engine and to
+  analytic European option engine (thanks to Peter Caspers and Marcin
+  Rybacki).
+
+- Improved calculation of spot date for vanilla swap around holidays
+  (thanks to Paul Giltinan).
+
+- Added ex-coupon feature to amortizing bonds, callable bonds and
+  convertible bonds.
+
+- Added optional first-coupon day counter to fixed-rate bonds (thanks
+  to Jacob Lee-Howes).
+
+Math
+----
+
+- Added convenience classes `LogCubic` and `LogMixedLinearCubic`
+  hiding a few default parameters (thanks to Andrea Maffezzoli).
 
 Models
 ------
 
-- It is now possible to use normal volatilities to calibrate a
-  short-rate model over caps.
+- Added control variate based on asymptotic expansion for the Heston
+  model (thanks to Klaus Spanderen).
 
 Date/time
 ---------
 
-- The Austrian calendar was added (thanks to Benjamin Schwendinger).
+- Added missing Hong Kong holiday (thanks to GitHub user `CarrieMY`).
 
-- The German calendar incorrectly listed December 31st as a holiday;
-  this is now fixed (thanks to Prasad Somwanshi).
+- Added a couple of one-off closing days to the Romanian calendar.
 
-- Chinese holidays were updated for 2020 and the coronavirus event
-  (thanks to Cheng Li).
-
-- South Korea holidays were updated for 2016-2020 (thanks to GitHub
+- Added a one-off holiday to South Korean calendar (thanks to GitHub
   user `fayce66`).
 
-- In the calendar class, `holidayList` is now an instance method; the
-  static version is deprecated.  The `businessDayList` method was also
-  added.  (Thanks to Piotr Siejda.)
+- Added a missing holiday to Turkish calendar (thanks to Berat
+  Postalcioglu).
 
-- A bug in the 30/360 German day counter was fixed (thanks to Kobe
-  Young for the heads-up).
+Documentation
+-------------
 
-Optimizers
-----------
-
-- The differential evolution optimizer was updated (thanks to Peter
-  Caspers).
-
-Currencies
-----------
-
-- Added Kazakstani Tenge to currencies (thanks to Jonathan Barber).
+- Added basic documentation to optimization methods (thanks to GitHub
+  user `martinbrose`).
 
 Deprecated features
 -------------------
 
-- Features deprecate in version 1.14 were removed: one of the
-  constructors of the `BSMOperator` class, the whole `OperatorFactory`
-  class, and the typedef `CalibrationHelper` which was used to alias
-  the `BlackCalibrationHelper` class.
-
-- The `CalibrationHelperBase` class is now called
-  `CalibrationHelper`. The old name remains as a typedef but is
-  deprecated.
-
-- The overload of `CalibratedModel::calibrate` and
-  `CalibratedModel::value` taking a vector of
-  `BlackCalibrationHelper`s are deprecated in favor of the ones taking
-  a vector of `CalibrationHelper`s.
-
-- The static method `Calendar::holidayList` is deprecated in favor of
-  the instance method by the same name.
-
-- The constructors of `PiecewiseDefaultCurve` and
-  `PiecewiseYieldCurve` taking an accuracy parameter are deprecated in
-  favor of passing the parameter to an instance of the bootstrap
-  class.
-
-- The constructors of `BondHelper` and derived classes taking a
-  boolean flag to choose between clean and dirty price are deprecated
-  in favor of the ones taking a `Bond::Price::Type` argument.  The
-  `useCleanPrice` method is also deprecated in favor of `priceType`.
-
-
-Thanks go also to Ralf Konrad, Klaus Spanderen, Carlos Fidel Selva
-Ochoa, F. Eugene Aumson and Francois Botha for smaller fixes,
-enhancements, and bug reports.
+- Features deprecate in version 1.16 were removed: a constructor of
+  the `FdmOrnsteinUhlenbeckOp` class and a constructor of the
+  `SwaptionVolatilityMatrix` class.

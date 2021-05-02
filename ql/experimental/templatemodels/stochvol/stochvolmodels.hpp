@@ -25,22 +25,22 @@
 #define _MAX_( a, b ) ( (a) > (b) ? (a) : (b) )
 
 namespace QuantLib {
-	
+    
     typedef HestonModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealHestonModel;
     typedef HestonModelT<QuantLib::Time,QuantLib::Real, MinimAD::Variable<Real> > MinimADHestonModel;
 
-	typedef StochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealStochVolModel;
+    typedef StochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealStochVolModel;
 
-	typedef TimeDependentStochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealTDStochVolModel;
-	typedef TimeDependentStochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real>::PWCAnalytical RealPWCStochVolModel;
+    typedef TimeDependentStochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealTDStochVolModel;
+    typedef TimeDependentStochVolModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real>::PWCAnalytical RealPWCStochVolModel;
 
-	typedef ShiftedSABRModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealShiftedSABRModel;
+    typedef ShiftedSABRModelT<QuantLib::Time,QuantLib::Real,QuantLib::Real> RealShiftedSABRModel;
 
-	typedef QuadraticLVSVModelT<QuantLib::Time, QuantLib::Real, QuantLib::Real> RealQuadraticLVSVModel;
+    typedef QuadraticLVSVModelT<QuantLib::Time, QuantLib::Real, QuantLib::Real> RealQuadraticLVSVModel;
 
     class ActiveHestonModel : public RealHestonModel {
     private:
-        boost::shared_ptr< MinimADHestonModel > amodel_;
+        ext::shared_ptr< MinimADHestonModel > amodel_;
     public:
         ActiveHestonModel( Real kappa,
                            Real theta,
@@ -48,7 +48,7 @@ namespace QuantLib {
                            Real rho,
                            Real v0 )
         : RealHestonModel(kappa, theta, sigma, rho, v0) {
-            amodel_ = boost::shared_ptr< MinimADHestonModel >( new MinimADHestonModel(kappa, theta, sigma, rho, v0) );
+            amodel_ = ext::shared_ptr< MinimADHestonModel >( new MinimADHestonModel(kappa, theta, sigma, rho, v0) );
         }
         
         std::vector<Real> vanillaOption(

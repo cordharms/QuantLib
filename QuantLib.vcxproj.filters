@@ -361,9 +361,6 @@
     <Filter Include="experimental\templatemodels\commodity">
       <UniqueIdentifier>{aebe4800-14a1-4aeb-9af0-947c2ec2a87c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="experimental\basismodels">
-      <UniqueIdentifier>{1962ba2e-2566-41c0-88b4-1c76448cec8d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="experimental\templatemodels\montecarlo\scripting">
       <UniqueIdentifier>{9bd815cd-26da-4760-a907-2aa4bae7caa2}</UniqueIdentifier>
     </Filter>
@@ -377,16 +374,10 @@
       <UniqueIdentifier>{7f4a74b0-c742-4243-b1a9-65c79ab22ccb}</UniqueIdentifier>
     </Filter>
     <Filter Include="experimental\vanillalocalvolmodel">
-      <UniqueIdentifier>{93e35b6d-2d1a-474a-86c3-875bdbd11b54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="experimental\termstructures\slvhelpers">
-      <UniqueIdentifier>{4e525e35-205e-47ca-948a-29b008a23654}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="experimental\termstructures\localCorrFX">
-      <UniqueIdentifier>{68aba14d-73f0-47e3-a1be-a105bee6796b}</UniqueIdentifier>
+      <UniqueIdentifier>{e4548260-cb9c-4d51-97cd-c64d2cdcd980}</UniqueIdentifier>
     </Filter>
     <Filter Include="experimental\templatemodels\hybrid">
-      <UniqueIdentifier>{a1161ee9-3934-4e50-995a-637ef45f6a43}</UniqueIdentifier>
+      <UniqueIdentifier>{db386236-aeb3-422e-86d4-254ea7660c84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2292,6 +2283,9 @@
     <ClInclude Include="ql\processes\blackscholesprocess.hpp">
       <Filter>processes</Filter>
     </ClInclude>
+    <ClInclude Include="ql\processes\coxingersollrossprocess.hpp">
+      <Filter>processes</Filter>
+    </ClInclude>
     <ClInclude Include="ql\processes\endeulerdiscretization.hpp">
       <Filter>processes</Filter>
     </ClInclude>
@@ -2449,6 +2443,9 @@
       <Filter>pricingengines\vanilla</Filter>
     </ClInclude>
     <ClInclude Include="ql\pricingengines\vanilla\analyticeuropeanengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\analyticeuropeanvasicekengine.hpp">
       <Filter>pricingengines\vanilla</Filter>
     </ClInclude>
     <ClInclude Include="ql\pricingengines\vanilla\analyticgjrgarchengine.hpp">
@@ -2616,6 +2613,9 @@
     <ClInclude Include="ql\pricingengines\lookback\analyticcontinuouspartialfloatinglookback.hpp">
       <Filter>pricingengines\lookback</Filter>
     </ClInclude>
+    <ClInclude Include="ql\pricingengines\lookback\mclookbackengine.hpp">
+      <Filter>pricingengines\lookback</Filter>
+    </ClInclude>
     <ClInclude Include="ql\pricingengines\bond\all.hpp">
       <Filter>pricingengines\bond</Filter>
     </ClInclude>
@@ -2763,6 +2763,9 @@
     <ClInclude Include="ql\time\calendars\finland.hpp">
       <Filter>time\calendars</Filter>
     </ClInclude>
+    <ClInclude Include="ql\time\calendars\france.hpp">
+      <Filter>time\calendars</Filter>
+    </ClInclude>
     <ClInclude Include="ql\time\calendars\germany.hpp">
       <Filter>time\calendars</Filter>
     </ClInclude>
@@ -2862,6 +2865,9 @@
     <ClInclude Include="ql\time\daycounters\actual360.hpp">
       <Filter>time\daycounters</Filter>
     </ClInclude>
+    <ClInclude Include="ql\time\daycounters\actual364.hpp">
+      <Filter>time\daycounters</Filter>
+    </ClInclude>
     <ClInclude Include="ql\time\daycounters\actual365fixed.hpp">
       <Filter>time\daycounters</Filter>
     </ClInclude>
@@ -2881,6 +2887,9 @@
       <Filter>time\daycounters</Filter>
     </ClInclude>
     <ClInclude Include="ql\time\daycounters\thirty360.hpp">
+      <Filter>time\daycounters</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\time\daycounters\thirty365.hpp">
       <Filter>time\daycounters</Filter>
     </ClInclude>
     <ClInclude Include="ql\legacy\all.hpp">
@@ -3591,6 +3600,9 @@
     <ClInclude Include="ql\experimental\barrieroption\analyticdoublebarrierengine.hpp">
       <Filter>experimental\barrieroption</Filter>
     </ClInclude>
+    <ClInclude Include="ql\experimental\barrieroption\mcdoublebarrierengine.hpp">
+      <Filter>experimental\barrieroption</Filter>
+    </ClInclude>
     <ClInclude Include="ql\experimental\barrieroption\binomialdoublebarrierengine.hpp">
       <Filter>experimental\barrieroption</Filter>
     </ClInclude>
@@ -3780,10 +3792,17 @@
     <ClInclude Include="ql\termstructure.hpp" />
     <ClInclude Include="ql\timegrid.hpp" />
     <ClInclude Include="ql\timeseries.hpp" />
+    <ClInclude Include="ql\tuple.hpp" />
     <ClInclude Include="ql\types.hpp" />
     <ClInclude Include="ql\userconfig.hpp" />
     <ClInclude Include="ql\version.hpp" />
     <ClInclude Include="ql\volatilitymodel.hpp" />
+    <ClInclude Include="ql\cashflows\cpicoupon.hpp">
+      <Filter>cashflows</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\cashflows\cpicouponpricer.hpp">
+      <Filter>cashflows</Filter>
+    </ClInclude>
     <ClInclude Include="ql\instruments\cpicapfloor.hpp">
       <Filter>instruments</Filter>
     </ClInclude>
@@ -3925,6 +3944,9 @@
     <ClInclude Include="ql\pricingengines\vanilla\fdhestonvanillaengine.hpp">
       <Filter>pricingengines\vanilla</Filter>
     </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\fdcirvanillaengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
     <ClInclude Include="ql\methods\finitedifferences\meshers\fdm1dmesher.hpp">
       <Filter>methods\finitedifferences\meshers</Filter>
     </ClInclude>
@@ -3982,6 +4004,9 @@
     <ClInclude Include="ql\methods\finitedifferences\operators\fdmhestonop.hpp">
       <Filter>methods\finitedifferences\operators</Filter>
     </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\operators\fdmcirop.hpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClInclude>
     <ClInclude Include="ql\methods\finitedifferences\solvers\fdmbatessolver.hpp">
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClInclude>
@@ -3992,6 +4017,9 @@
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClInclude>
     <ClInclude Include="ql\methods\finitedifferences\solvers\fdmhestonsolver.hpp">
+      <Filter>methods\finitedifferences\solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\solvers\fdmcirsolver.hpp">
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClInclude>
     <ClInclude Include="ql\methods\finitedifferences\meshers\fdmblackscholesmesher.hpp">
@@ -4216,11 +4244,20 @@
     <ClInclude Include="ql\experimental\finitedifferences\fdmhestongreensfct.hpp">
       <Filter>experimental\finitedifferences</Filter>
     </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\operators\fdmlocalvolfwdop.hpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClInclude>
     <ClInclude Include="ql\experimental\finitedifferences\fdornsteinuhlenbeckvanillaengine.hpp">
       <Filter>experimental\finitedifferences</Filter>
     </ClInclude>
     <ClInclude Include="ql\termstructures\volatility\equityfx\noexceptlocalvolsurface.hpp">
       <Filter>termstructures\volatility\equityfx</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\math\polynomialmathfunction.hpp">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\math\pascaltriangle.hpp">
+      <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="ql\models\shortrate\onefactormodels\gaussian1dmodel.hpp">
       <Filter>models\shortrate\onefactormodels</Filter>
@@ -4255,6 +4292,9 @@
     <ClInclude Include="ql\termstructures\volatility\equityfx\hestonblackvolsurface.hpp">
       <Filter>termstructures\volatility\equityfx</Filter>
     </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.hpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClInclude>
     <ClInclude Include="ql\math\matrixutilities\gmres.hpp">
       <Filter>math\matrixutilities</Filter>
     </ClInclude>
@@ -4266,6 +4306,78 @@
     </ClInclude>
     <ClInclude Include="ql\experimental\math\gaussiannoncentralchisquaredpolynomial.hpp">
       <Filter>experimental\math</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\all.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\swaptioncfs.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\tenoroptionletvts.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\tenorswaptionvts.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\meshers\fdmcev1dmesher.hpp">
+      <Filter>methods\finitedifferences\meshers</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\operators\fdmcevop.hpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\operators\fdmsabrop.hpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\bsmrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\cevrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\fdmdiscountdirichletboundary.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\gbsmrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\hestonrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\localvolrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\riskneutraldensitycalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\utilities\squarerootprocessrndcalculator.hpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\analyticcevengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\fdcevvanillaengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\fdsabrvanillaengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\methods\finitedifferences\schemes\cranknicolsonscheme.hpp">
+      <Filter>methods\finitedifferences\schemes</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\math\integrals\gausslaguerrecosinepolynomial.hpp">
+      <Filter>math\integrals</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\math\integrals\momentbasedgaussianpolynomial.hpp">
+      <Filter>math\integrals</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\pricingengines\vanilla\exponentialfittinghestonengine.hpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\math\integrals\exponentialintegrals.hpp">
+      <Filter>math\integrals</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\termstructures\yield\ultimateforwardtermstructure.hpp">
+      <Filter>termstructures\yield</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\sabrswaptioncube\sabrswaptioncube.hpp">
       <Filter>experimental\sabrswaptioncube</Filter>
@@ -4284,6 +4396,15 @@
       <Filter>experimental\basismodels</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\basismodels\spreadyieldtermstructure.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\swaptioncfs.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\tenoroptionletvts.hpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClInclude>
+    <ClInclude Include="ql\experimental\basismodels\tenorswaptionvts.hpp">
       <Filter>experimental\basismodels</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\templatemodels\auxilliaries\auxilliariesT.hpp">
@@ -4451,20 +4572,8 @@
     <ClInclude Include="ql\experimental\templatemodels\qgaussian2\qglsvmodel.hpp">
       <Filter>experimental\templatemodels\qgaussian2</Filter>
     </ClInclude>
-    <ClInclude Include="ql\experimental\basismodels\swaptioncfs.hpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\basismodels\tenoroptionletvts.hpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\basismodels\tenorswaptionvts.hpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\cashflows\cpicoupon.hpp">
-      <Filter>cashflows</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\cashflows\cpicouponpricer.hpp">
-      <Filter>cashflows</Filter>
+    <ClInclude Include="ql\experimental\vanillalocalvolmodel\all.hpp">
+      <Filter>experimental\vanillalocalvolmodel</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\vanillalocalvolmodel\vanillalocalvolmodel.hpp">
       <Filter>experimental\vanillalocalvolmodel</Filter>
@@ -4475,39 +4584,8 @@
     <ClInclude Include="ql\experimental\vanillalocalvolmodel\vanillalocalvoltermstructures.hpp">
       <Filter>experimental\vanillalocalvolmodel</Filter>
     </ClInclude>
-    <ClInclude Include="ql\buildinfo.hpp" />
-    <ClInclude Include="ql\experimental\templatemodels\qgaussian2\mccalibrator.hpp">
-      <Filter>experimental\templatemodels\qgaussian2</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\corrtermstructureStrike.hpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localcorrsurfaceabf.hpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localcorrtermstructure.hpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\Helper\KernelInterface.hpp">
-      <Filter>experimental\termstructures\slvhelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\Helper\ParticleMethodUtils.hpp">
-      <Filter>experimental\termstructures\slvhelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCorrelationFX.hpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCovarianceFX.hpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.hpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.hpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.hpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
+    <ClInclude Include="ql\experimental\templatemodels\multiasset\multiassetslvmodel.hpp">
+      <Filter>experimental\templatemodels\multiasset</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\templatemodels\multiasset\localcorrelationbsmodel.hpp">
       <Filter>experimental\templatemodels\multiasset</Filter>
@@ -4515,74 +4593,12 @@
     <ClInclude Include="ql\experimental\templatemodels\multiasset\localcorrelationSLVmodel.hpp">
       <Filter>experimental\templatemodels\multiasset</Filter>
     </ClInclude>
-    <ClInclude Include="ql\experimental\templatemodels\multiasset\multiassetslvmodel.hpp">
-      <Filter>experimental\templatemodels\multiasset</Filter>
+    <ClInclude Include="ql\experimental\templatemodels\qgaussian2\mccalibrator.hpp">
+      <Filter>experimental\templatemodels\qgaussian2</Filter>
     </ClInclude>
-    <ClInclude Include="ql\experimental\basismodels\all.hpp" />
-    <ClInclude Include="ql\experimental\templatemodels\all.hpp" />
-    <ClInclude Include="ql\experimental\templatemodels\montecarlo\all.hpp" />
-    <ClInclude Include="ql\experimental\templatemodels\multiasset\all.hpp" />
-    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.hpp" />
-    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.hpp" />
-    <ClInclude Include="ql\methods\finitedifferences\operators\fdmlocalvolfwdop.hpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\bsmrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\gbsmrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\hestonrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\localvolrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\riskneutraldensitycalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\squarerootprocessrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\pricingengines\vanilla\analyticcevengine.hpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\cevrndcalculator.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\pricingengines\vanilla\fdcevvanillaengine.hpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\meshers\fdmcev1dmesher.hpp">
-      <Filter>methods\finitedifferences\meshers</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\operators\fdmcevop.hpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\utilities\fdmdiscountdirichletboundary.hpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.hpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\operators\fdmsabrop.hpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\pricingengines\vanilla\fdsabrvanillaengine.hpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\methods\finitedifferences\schemes\cranknicolsonscheme.hpp">
-      <Filter>methods\finitedifferences\schemes</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\math\pascaltriangle.hpp">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\math\polynomialmathfunction.hpp">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="ql\time\calendars\france.hpp">
-      <Filter>time\calendars</Filter>
+    <ClInclude Include="ql\buildinfo.hpp" />
+    <ClInclude Include="ql\experimental\templatemodels\hybrid\all.hpp">
+      <Filter>experimental\templatemodels\hybrid</Filter>
     </ClInclude>
     <ClInclude Include="ql\experimental\templatemodels\hybrid\assetmodelT.hpp">
       <Filter>experimental\templatemodels\hybrid</Filter>
@@ -4593,10 +4609,10 @@
     <ClInclude Include="ql\experimental\templatemodels\hybrid\hybridmodelT.hpp">
       <Filter>experimental\templatemodels\hybrid</Filter>
     </ClInclude>
-    <ClInclude Include="ql\experimental\templatemodels\hybrid\spreadmodelT.hpp">
+    <ClInclude Include="ql\experimental\templatemodels\hybrid\localvolassetmodel.hpp">
       <Filter>experimental\templatemodels\hybrid</Filter>
     </ClInclude>
-    <ClInclude Include="ql\experimental\templatemodels\hybrid\localvolassetmodel.hpp">
+    <ClInclude Include="ql\experimental\templatemodels\hybrid\spreadmodelT.hpp">
       <Filter>experimental\templatemodels\hybrid</Filter>
     </ClInclude>
   </ItemGroup>
@@ -5732,6 +5748,9 @@
     <ClCompile Include="ql\processes\blackscholesprocess.cpp">
       <Filter>processes</Filter>
     </ClCompile>
+    <ClCompile Include="ql\processes\coxingersollrossprocess.cpp">
+      <Filter>processes</Filter>
+    </ClCompile>
     <ClCompile Include="ql\processes\endeulerdiscretization.cpp">
       <Filter>processes</Filter>
     </ClCompile>
@@ -5840,6 +5859,9 @@
     <ClCompile Include="ql\pricingengines\vanilla\analyticeuropeanengine.cpp">
       <Filter>pricingengines\vanilla</Filter>
     </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\analyticeuropeanvasicekengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
     <ClCompile Include="ql\pricingengines\vanilla\analyticgjrgarchengine.cpp">
       <Filter>pricingengines\vanilla</Filter>
     </ClCompile>
@@ -5940,6 +5962,9 @@
       <Filter>pricingengines\lookback</Filter>
     </ClCompile>
     <ClCompile Include="ql\pricingengines\lookback\analyticcontinuouspartialfloatinglookback.cpp">
+      <Filter>pricingengines\lookback</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\pricingengines\lookback\mclookbackengine.cpp">
       <Filter>pricingengines\lookback</Filter>
     </ClCompile>
     <ClCompile Include="ql\pricingengines\bond\bondfunctions.cpp">
@@ -6056,6 +6081,9 @@
     <ClCompile Include="ql\time\calendars\finland.cpp">
       <Filter>time\calendars</Filter>
     </ClCompile>
+    <ClCompile Include="ql\time\calendars\france.cpp">
+      <Filter>time\calendars</Filter>
+    </ClCompile>
     <ClCompile Include="ql\time\calendars\germany.cpp">
       <Filter>time\calendars</Filter>
     </ClCompile>
@@ -6159,6 +6187,9 @@
       <Filter>time\daycounters</Filter>
     </ClCompile>
     <ClCompile Include="ql\time\daycounters\thirty360.cpp">
+      <Filter>time\daycounters</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\time\daycounters\thirty365.cpp">
       <Filter>time\daycounters</Filter>
     </ClCompile>
     <ClCompile Include="ql\legacy\libormarketmodels\lfmcovarparam.cpp">
@@ -6692,6 +6723,9 @@
     <ClCompile Include="ql\experimental\barrieroption\analyticdoublebarrierengine.cpp">
       <Filter>experimental\barrieroption</Filter>
     </ClCompile>
+    <ClCompile Include="ql\experimental\barrieroption\mcdoublebarrierengine.cpp">
+      <Filter>experimental\barrieroption</Filter>
+    </ClCompile>
     <ClCompile Include="ql\experimental\barrieroption\discretizeddoublebarrieroption.cpp">
       <Filter>experimental\barrieroption</Filter>
     </ClCompile>
@@ -6896,6 +6930,9 @@
     <ClCompile Include="ql\pricingengines\vanilla\fdhestonvanillaengine.cpp">
       <Filter>pricingengines\vanilla</Filter>
     </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\fdcirvanillaengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
     <ClCompile Include="ql\methods\finitedifferences\operators\fdm2dblackscholesop.cpp">
       <Filter>methods\finitedifferences\operators</Filter>
     </ClCompile>
@@ -6941,6 +6978,9 @@
     <ClCompile Include="ql\methods\finitedifferences\operators\fdmhestonop.cpp">
       <Filter>methods\finitedifferences\operators</Filter>
     </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\operators\fdmcirop.cpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClCompile>
     <ClCompile Include="ql\methods\finitedifferences\solvers\fdmbatessolver.cpp">
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClCompile>
@@ -6951,6 +6991,9 @@
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClCompile>
     <ClCompile Include="ql\methods\finitedifferences\solvers\fdmhestonsolver.cpp">
+      <Filter>methods\finitedifferences\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\solvers\fdmcirsolver.cpp">
       <Filter>methods\finitedifferences\solvers</Filter>
     </ClCompile>
     <ClCompile Include="ql\methods\finitedifferences\meshers\fdmblackscholesmesher.cpp">
@@ -7127,6 +7170,15 @@
     <ClCompile Include="ql\experimental\finitedifferences\fdmhestongreensfct.cpp">
       <Filter>experimental\finitedifferences</Filter>
     </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\operators\fdmlocalvolfwdop.cpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\math\polynomialmathfunction.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\math\pascaltriangle.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
     <ClCompile Include="ql\models\shortrate\onefactormodels\gaussian1dmodel.cpp">
       <Filter>models\shortrate\onefactormodels</Filter>
     </ClCompile>
@@ -7142,6 +7194,9 @@
     <ClCompile Include="ql\termstructures\volatility\equityfx\hestonblackvolsurface.cpp">
       <Filter>termstructures\volatility\equityfx</Filter>
     </ClCompile>
+    <ClCompile Include="ql\patterns\observable.cpp">
+      <Filter>patterns</Filter>
+    </ClCompile>
     <ClCompile Include="ql\experimental\math\fireflyalgorithm.cpp">
       <Filter>experimental\math</Filter>
     </ClCompile>
@@ -7154,6 +7209,9 @@
     <ClCompile Include="ql\experimental\models\normalclvmodel.cpp">
       <Filter>experimental\models</Filter>
     </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.cpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClCompile>
     <ClCompile Include="ql\experimental\models\squarerootclvmodel.cpp">
       <Filter>experimental\models</Filter>
     </ClCompile>
@@ -7163,8 +7221,74 @@
     <ClCompile Include="ql\time\daycounters\actual365fixed.cpp">
       <Filter>time\daycounters</Filter>
     </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\swaptioncfs.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\tenoroptionletvts.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\tenorswaptionvts.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\meshers\fdmcev1dmesher.cpp">
+      <Filter>methods\finitedifferences\meshers</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\operators\fdmcevop.cpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\operators\fdmsabrop.cpp">
+      <Filter>methods\finitedifferences\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\bsmrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\cevrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\fdmdiscountdirichletboundary.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\gbsmrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\hestonrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\localvolrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\riskneutraldensitycalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\utilities\squarerootprocessrndcalculator.cpp">
+      <Filter>methods\finitedifferences\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\analyticcevengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\fdcevvanillaengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\fdsabrvanillaengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\methods\finitedifferences\schemes\cranknicolsonscheme.cpp">
+      <Filter>methods\finitedifferences\schemes</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\pricingengines\vanilla\exponentialfittinghestonengine.cpp">
+      <Filter>pricingengines\vanilla</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\math\integrals\exponentialintegrals.cpp">
+      <Filter>math\integrals</Filter>
+    </ClCompile>
     <ClCompile Include="ql\experimental\sabrswaptioncube\sabrswaptioncube.cpp">
       <Filter>experimental\sabrswaptioncube</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\cashflows\cpicoupon.cpp">
+      <Filter>cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\cashflows\cpicouponpricer.cpp">
+      <Filter>cashflows</Filter>
     </ClCompile>
     <ClCompile Include="ql\experimental\basismodels\basisswap.cpp">
       <Filter>experimental\basismodels</Filter>
@@ -7176,6 +7300,15 @@
       <Filter>experimental\basismodels</Filter>
     </ClCompile>
     <ClCompile Include="ql\experimental\basismodels\fxfwdratehelper.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\swaptioncfs.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\tenoroptionletvts.cpp">
+      <Filter>experimental\basismodels</Filter>
+    </ClCompile>
+    <ClCompile Include="ql\experimental\basismodels\tenorswaptionvts.cpp">
       <Filter>experimental\basismodels</Filter>
     </ClCompile>
     <ClCompile Include="ql\experimental\templatemodels\hullwhite\bondoptionengine.cpp">
@@ -7220,21 +7353,6 @@
     <ClCompile Include="ql\experimental\templatemodels\qgaussian2\qglsvmodel.cpp">
       <Filter>experimental\templatemodels\qgaussian2</Filter>
     </ClCompile>
-    <ClCompile Include="ql\experimental\basismodels\swaptioncfs.cpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\basismodels\tenoroptionletvts.cpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\basismodels\tenorswaptionvts.cpp">
-      <Filter>experimental\basismodels</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\cashflows\cpicoupon.cpp">
-      <Filter>cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\cashflows\cpicouponpricer.cpp">
-      <Filter>cashflows</Filter>
-    </ClCompile>
     <ClCompile Include="ql\experimental\vanillalocalvolmodel\vanillalocalvolmodel.cpp">
       <Filter>experimental\vanillalocalvolmodel</Filter>
     </ClCompile>
@@ -7244,36 +7362,8 @@
     <ClCompile Include="ql\experimental\vanillalocalvolmodel\vanillalocalvoltermstructures.cpp">
       <Filter>experimental\vanillalocalvolmodel</Filter>
     </ClCompile>
-    <ClCompile Include="ql\buildinfo.cpp" />
-    <ClCompile Include="ql\experimental\templatemodels\qgaussian2\mccalibrator.cpp">
-      <Filter>experimental\templatemodels\qgaussian2</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\corrtermstructureStrike.cpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localcorrsurfaceabf.cpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localcorrtermstructure.cpp">
-      <Filter>experimental\termstructures</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\Helper\ParticleMethodUtils.cpp">
-      <Filter>experimental\termstructures\slvhelpers</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCorrelationFX.cpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCovarianceFX.cpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.cpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.cpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.cpp">
-      <Filter>experimental\termstructures\localCorrFX</Filter>
+    <ClCompile Include="ql\experimental\templatemodels\multiasset\multiassetslvmodel.cpp">
+      <Filter>experimental\templatemodels\multiasset</Filter>
     </ClCompile>
     <ClCompile Include="ql\experimental\templatemodels\multiasset\localcorrelationbsmodel.cpp">
       <Filter>experimental\templatemodels\multiasset</Filter>
@@ -7281,77 +7371,10 @@
     <ClCompile Include="ql\experimental\templatemodels\multiasset\localcorrelationSLVmodel.cpp">
       <Filter>experimental\templatemodels\multiasset</Filter>
     </ClCompile>
-    <ClCompile Include="ql\experimental\templatemodels\multiasset\multiassetslvmodel.cpp">
-      <Filter>experimental\templatemodels\multiasset</Filter>
+    <ClCompile Include="ql\experimental\templatemodels\qgaussian2\mccalibrator.cpp">
+      <Filter>experimental\templatemodels\qgaussian2</Filter>
     </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\operators\fdmlocalvolfwdop.cpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\bsmrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\gbsmrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\hestonrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\localvolrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\riskneutraldensitycalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\squarerootprocessrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\pricingengines\vanilla\analyticcevengine.cpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\cevrndcalculator.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\pricingengines\vanilla\fdcevvanillaengine.cpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\meshers\fdmcev1dmesher.cpp">
-      <Filter>methods\finitedifferences\meshers</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\operators\fdmcevop.cpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\utilities\fdmdiscountdirichletboundary.cpp">
-      <Filter>methods\finitedifferences\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\operators\fdmornsteinuhlenbeckop.cpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\operators\fdmsabrop.cpp">
-      <Filter>methods\finitedifferences\operators</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\pricingengines\vanilla\fdsabrvanillaengine.cpp">
-      <Filter>pricingengines\vanilla</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\methods\finitedifferences\schemes\cranknicolsonscheme.cpp">
-      <Filter>methods\finitedifferences\schemes</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\math\pascaltriangle.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\math\polynomialmathfunction.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\patterns\observable.cpp">
-      <Filter>patterns</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\time\calendars\france.cpp">
-      <Filter>time\calendars</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\templatemodels\hybrid\hybridmodels.cpp">
-      <Filter>experimental\templatemodels\hybrid</Filter>
-    </ClCompile>
-    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.cpp" />
-    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.cpp" />
+    <ClCompile Include="ql\buildinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Flex Include="ql\experimental\templatemodels\montecarlo\scripting\lexer.l">
