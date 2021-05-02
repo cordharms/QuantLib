@@ -27,7 +27,7 @@
 
 namespace QuantLib {
 
-	
+	namespace{
 
 		// Matrix infinity norm. See Golub and van Loan (2.3.10) or
 		// <http://en.wikipedia.org/wiki/Matrix_norm>
