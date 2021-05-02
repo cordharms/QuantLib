@@ -4615,6 +4615,18 @@
     <ClInclude Include="ql\experimental\templatemodels\hybrid\spreadmodelT.hpp">
       <Filter>experimental\templatemodels\hybrid</Filter>
     </ClInclude>
+    <ClInclude Include="ql\experimental\termstructures\Helper\ParticleMethodUtils.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\Helper\KernelInterface.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\corrtermstructureStrike.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localcorrsurfaceabf.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localcorrtermstructure.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCorrelationFX.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCovarianceFX.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.hpp" />
+    <ClInclude Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ql\methods\montecarlo\brownianbridge.cpp">
@@ -7375,6 +7387,17 @@
       <Filter>experimental\templatemodels\qgaussian2</Filter>
     </ClCompile>
     <ClCompile Include="ql\buildinfo.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\Helper\ParticleMethodUtils.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\corrtermstructureStrike.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localcorrsurfaceabf.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localcorrtermstructure.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\CTSlocalInLambdaIndex.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrIndex\localcorrsurfaceabfIndex.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCorrelationFX.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossCovarianceFX.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossNegSkewFX.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrFX\CTSlocalInCrossVolatilityFX.cpp" />
+    <ClCompile Include="ql\experimental\termstructures\localCorrFX\localcorrsurfaceabfFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Flex Include="ql\experimental\templatemodels\montecarlo\scripting\lexer.l">
